@@ -8,18 +8,14 @@ class cancion
 {
 
 private:
-    string id;             // Identificador alfanumérico (ej. "AR001AL02C03")
-    string nombre;         // Título de la canción
-    float duracion;        // En minutos
-    int reproducciones;
-    string ruta128;        // Ruta del archivo a 128 kbps
-    string ruta320;        // Ruta del archivo a 320 kbps
-    creditos* creditos;    // Colaboradores de la canción
-    album* album;          // Referencia al álbum al que pertenece
+    string id, nombre, ruta128, ruta320; // id: código alfanumérico de la canción | nombre: título | ruta128/ruta320: ubicaciones de los archivos de audio
+    float duracion;                      // Duración de la canción en minutos
+    int reproducciones;                  // Contador de cuántas veces se ha reproducido
+    creditos *creditos;                  // Puntero al objeto que almacena los créditos de la canción
+    album *album;                        // Puntero al álbum al que pertenece la canción
 
 public:
     cancion();
-
 };
 
 #endif // CANCION_H
