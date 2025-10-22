@@ -5,6 +5,7 @@ release/colaborador.o
 release/creditos.o
 release/funciones.o
 release/main.o
+release/publicidad.o
 release/reproductor.o
 release/udeatunes.o
 release/usuario.o

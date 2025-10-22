@@ -5,6 +5,7 @@ debug/colaborador.o
 debug/creditos.o
 debug/funciones.o
 debug/main.o
+debug/publicidad.o
 debug/reproductor.o
 debug/udeatunes.o
 debug/usuario.o
