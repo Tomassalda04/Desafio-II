@@ -9,15 +9,21 @@ class udeaTunes
 {
 
 private:
-    usuario *usuarios;         // Arreglo dinámico con todos los usuarios registrados
-    int numUsuarios;           // Cantidad total de usuarios
-    int numArtistas;           // Cantidad total de artistas
-    int numMensajes;           // Cantidad total de anuncios publicitarios
-    artista *artistas;         // Arreglo dinámico con los artistas disponibles
-    publicidad *mensajes;      // Arreglo dinámico de mensajes publicitarios del sistema
+    usuario *usuarios;
+    int numUsuarios;
+    int numArtistas;
+    int numMensajes;
+    artista *artistas;
+    publicidad *mensajes;
+    usuario *usuarioActual;
 
 public:
     udeaTunes();
+    ~udeaTunes();
+
+    void menuPrincipal();
+    void iniciarSesion();
+    void menuUsuario(usuario* actual);
 };
 
 #endif // UDEATUNES_H

@@ -6,10 +6,10 @@ class creditos
 {
 
 private:
-    colaborador *productores;   // Arreglo dinámico de productores asociados a la canción
-    colaborador *musicos;       // Arreglo dinámico de músicos que participaron en la canción
-    colaborador *compositores;  // Arreglo dinámico de compositores de la canción
-    int cantProd, cantMus, cantComp; // Contadores de cada tipo de colaborador
+    colaborador *productores;
+    colaborador *musicos;
+    colaborador *compositores;
+    int cantProd, cantMus, cantComp;
 
 public:
     creditos();

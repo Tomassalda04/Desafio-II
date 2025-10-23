@@ -13,6 +13,7 @@ SOURCES += \
         colaborador.cpp \
         creditos.cpp \
         funciones.cpp \
+        funcionesaux.cpp \
         main.cpp \
         publicidad.cpp \
         reproductor.cpp \
@@ -31,6 +32,7 @@ HEADERS += \
     colaborador.h \
     creditos.h \
     funciones.h \
+    funcionesaux.h \
     publicidad.h \
     reproductor.h \
     udeatunes.h \

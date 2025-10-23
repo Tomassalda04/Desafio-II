@@ -6,8 +6,8 @@ class publicidad
 {
 
 private:
-    string texto;   // Texto del mensaje publicitario
-    char categoria; // Categoría del anuncio: 'A', 'B' o 'C' según prioridad
+    string texto;
+    char categoria;
 
 public:
     publicidad();

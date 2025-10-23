@@ -4,6 +4,7 @@ release/cancion.o
 release/colaborador.o
 release/creditos.o
 release/funciones.o
+release/funcionesaux.o
 release/main.o
 release/publicidad.o
 release/reproductor.o

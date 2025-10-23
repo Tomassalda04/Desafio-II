@@ -4,6 +4,7 @@ debug/cancion.o
 debug/colaborador.o
 debug/creditos.o
 debug/funciones.o
+debug/funcionesaux.o
 debug/main.o
 debug/publicidad.o
 debug/reproductor.o
