@@ -8,8 +8,8 @@ udeaTunes::udeaTunes() {
     numUsuarios = numArtistas = numMensajes = 0;
 
     cargarUsuarios(usuarios, numUsuarios);
-    //cargarArtistas(artistas, numArtistas);
-    //cargarPublicidad(mensajes, numMensajes);
+    cargarArtistas(artistas, numArtistas);
+    cargarPublicidad(mensajes, numMensajes);
 }
 
 udeaTunes::~udeaTunes() {
@@ -19,7 +19,6 @@ udeaTunes::~udeaTunes() {
     delete[] mensajes;
 }
 
-// ========== MENÚ PRINCIPAL ==========
 void udeaTunes::menuPrincipal() {
     int opcion;
     do {
@@ -43,7 +42,6 @@ void udeaTunes::menuPrincipal() {
     } while (opcion != 2);
 }
 
-// ========== INICIAR SESIÓN ==========
 void udeaTunes::iniciarSesion() {
     string nick;
     cout << "\nIngrese su nickname: ";

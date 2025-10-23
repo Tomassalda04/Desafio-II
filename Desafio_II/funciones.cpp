@@ -5,7 +5,7 @@
 #include "funcionesaux.h"
 
 void cargarUsuarios(usuario*& usuarios, int& numUsuarios) {
-    ifstream archivo("datos/usuarios.txt");
+    ifstream archivo("usuarios.txt");
     if (!archivo.is_open()) {
         cout << "No se pudo abrir usuarios.txt" << endl;
         return;
@@ -76,7 +76,7 @@ void agregarUsuario(usuario*& usuarios, int& numUsuarios) {
 void guardarUsuarios(usuario* usuarios, int numUsuarios) {
     ofstream archivo("datos/usuarios.txt");
     if (!archivo.is_open()) {
-        cout << "⚠️ No se pudo abrir usuarios.txt para escritura" << endl;
+        cout << "No se pudo abrir usuarios.txt para escritura" << endl;
         return;
     }
 
@@ -92,11 +92,10 @@ void guardarUsuarios(usuario* usuarios, int numUsuarios) {
     cout << "Usuarios guardados correctamente." << endl;
 }
 
-/*
 void cargarArtistas(artista*& artistas, int& numArtistas) {
-    ifstream archivo("datos/artistas.txt");
+    ifstream archivo("artistas.txt");
     if (!archivo.is_open()) {
-        cout << "⚠️ No se pudo abrir artistas.txt" << endl;
+        cout << "No se pudo abrir artistas.txt" << endl;
         return;
     }
 
@@ -104,20 +103,37 @@ void cargarArtistas(artista*& artistas, int& numArtistas) {
     artistas = nullptr;
 
     string linea;
+    bool primeraLinea = true;
+
     while (getline(archivo, linea)) {
+        if (linea.empty()) continue;
+        if (primeraLinea && linea.find("id") != string::npos) {
+            primeraLinea = false;
+            continue;
+        }
+
         stringstream ss(linea);
         string id, nombre, pais;
-        unsigned int edad, seguidores, posicion, numAlbums;
+        string edadStr, seguidoresStr, posicionStr, numAlbumsStr;
 
         getline(ss, id, ',');
         getline(ss, nombre, ',');
         getline(ss, pais, ',');
-        ss >> edad >> seguidores >> posicion >> numAlbums;
+        getline(ss, edadStr, ',');
+        getline(ss, seguidoresStr, ',');
+        getline(ss, posicionStr, ',');
+        getline(ss, numAlbumsStr, ',');
+
+        unsigned int edad = stoi(edadStr);
+        unsigned int seguidores = stoul(seguidoresStr);
+        unsigned int posicion = stoi(posicionStr);
+        unsigned int numAlbums = stoi(numAlbumsStr);
 
         artista nuevo(id, nombre, pais, edad, seguidores, posicion, numAlbums);
 
         artista* temp = new artista[numArtistas + 1];
-        for (int i = 0; i < numArtistas; i++) temp[i] = artistas[i];
+        for (int i = 0; i < numArtistas; i++)
+            temp[i] = artistas[i];
         temp[numArtistas] = nuevo;
 
         delete[] artistas;
@@ -126,14 +142,13 @@ void cargarArtistas(artista*& artistas, int& numArtistas) {
     }
 
     archivo.close();
-    cout << "✅ Artistas cargados: " << numArtistas << endl;
+    cout << "Artistas cargados: " << numArtistas << endl;
 }
 
-// -------------------- CARGAR PUBLICIDAD --------------------
 void cargarPublicidad(publicidad*& mensajes, int& numMensajes) {
     ifstream archivo("datos/publicidad.txt");
     if (!archivo.is_open()) {
-        cout << "⚠️ No se pudo abrir publicidad.txt" << endl;
+        cout << "No se pudo abrir publicidad.txt" << endl;
         return;
     }
 
@@ -161,14 +176,13 @@ void cargarPublicidad(publicidad*& mensajes, int& numMensajes) {
     }
 
     archivo.close();
-    cout << " Mensajes publicitarios cargados: " << numMensajes << endl;
+    cout << "Mensajes publicitarios cargados: " << numMensajes << endl;
 }
-
-// -------------------- GUARDAR USUARIOS --------------------
+/*
 void guardarUsuarios(usuario* usuarios, int numUsuarios) {
     ofstream archivo("datos/usuarios.txt");
     if (!archivo.is_open()) {
-        cout << "️ No se pudo abrir usuarios.txt para escritura" << endl;
+        cout << "️No se pudo abrir usuarios.txt para escritura" << endl;
         return;
     }
 
@@ -177,10 +191,11 @@ void guardarUsuarios(usuario* usuarios, int numUsuarios) {
                 << usuarios[i].getCiudad() << ","
                 << usuarios[i].getPais() << ","
                 << usuarios[i].getFechaRegistro() << ","
-                << usuarios[i].esPremium() << "\n";
+                << usuarios[i].getPremium() << "\n";
     }
 
     archivo.close();
     cout << "Usuarios guardados correctamente." << endl;
 }
+
 */

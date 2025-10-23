@@ -32,7 +32,6 @@ void reproductor::reproducir(cancion* c) {
         return;
     }
 
-    // Si el usuario NO es Premium, mostrar anuncio cada 2 reproducciones
     if (!usr->getPremium()) {
         contadorReproducciones++;
         if (contadorReproducciones % 2 == 0 && anuncios && numAnuncios > 0) {
