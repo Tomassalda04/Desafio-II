@@ -5,7 +5,7 @@
 #include "funcionesaux.h"
 
 void cargarUsuarios(usuario*& usuarios, int& numUsuarios) {
-    ifstream archivo("datos/usuarios.txt");
+    ifstream archivo("usuarios.txt");
     if (!archivo.is_open()) {
         cout << "No se pudo abrir usuarios.txt" << endl;
         return;
@@ -74,7 +74,7 @@ void agregarUsuario(usuario*& usuarios, int& numUsuarios) {
 }
 
 void guardarUsuarios(usuario* usuarios, int numUsuarios) {
-    ofstream archivo("datos/usuarios.txt");
+    ofstream archivo("usuarios.txt");
     if (!archivo.is_open()) {
         cout << "⚠️ No se pudo abrir usuarios.txt para escritura" << endl;
         return;
@@ -94,7 +94,7 @@ void guardarUsuarios(usuario* usuarios, int numUsuarios) {
 
 /*
 void cargarArtistas(artista*& artistas, int& numArtistas) {
-    ifstream archivo("datos/artistas.txt");
+    ifstream archivo("artistas.txt");
     if (!archivo.is_open()) {
         cout << "⚠️ No se pudo abrir artistas.txt" << endl;
         return;
@@ -131,7 +131,7 @@ void cargarArtistas(artista*& artistas, int& numArtistas) {
 
 // -------------------- CARGAR PUBLICIDAD --------------------
 void cargarPublicidad(publicidad*& mensajes, int& numMensajes) {
-    ifstream archivo("datos/publicidad.txt");
+    ifstream archivo("publicidad.txt");
     if (!archivo.is_open()) {
         cout << "⚠️ No se pudo abrir publicidad.txt" << endl;
         return;
@@ -164,23 +164,5 @@ void cargarPublicidad(publicidad*& mensajes, int& numMensajes) {
     cout << " Mensajes publicitarios cargados: " << numMensajes << endl;
 }
 
-// -------------------- GUARDAR USUARIOS --------------------
-void guardarUsuarios(usuario* usuarios, int numUsuarios) {
-    ofstream archivo("datos/usuarios.txt");
-    if (!archivo.is_open()) {
-        cout << "️ No se pudo abrir usuarios.txt para escritura" << endl;
-        return;
-    }
 
-    for (int i = 0; i < numUsuarios; i++) {
-        archivo << usuarios[i].getNickname() << ","
-                << usuarios[i].getCiudad() << ","
-                << usuarios[i].getPais() << ","
-                << usuarios[i].getFechaRegistro() << ","
-                << usuarios[i].esPremium() << "\n";
-    }
-
-    archivo.close();
-    cout << "Usuarios guardados correctamente." << endl;
-}
 */

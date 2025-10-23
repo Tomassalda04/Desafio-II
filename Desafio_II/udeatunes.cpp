@@ -8,6 +8,8 @@ udeaTunes::udeaTunes() {
     numUsuarios = numArtistas = numMensajes = 0;
 
     cargarUsuarios(usuarios, numUsuarios);
+
+
     //cargarArtistas(artistas, numArtistas);
     //cargarPublicidad(mensajes, numMensajes);
 }
@@ -21,26 +23,26 @@ udeaTunes::~udeaTunes() {
 
 // ========== MENÚ PRINCIPAL ==========
 void udeaTunes::menuPrincipal() {
-    int opcion;
+    char opcion;
     do {
         cout << "\n===== UDEATUNES =====\n";
-        cout << "1. Iniciar sesión\n";
+        cout << "1. Iniciar sesion\n";
         cout << "2. Salir\n";
-        cout << "Seleccione una opción: ";
+        cout << "Seleccione una opcion: ";
         cin >> opcion;
 
         switch (opcion) {
-        case 1:
+        case '1':
             iniciarSesion();
             break;
-        case 2:
+        case '2':
             cout << "Saliendo del sistema...\n";
             break;
         default:
-            cout << "Opción inválida.\n";
+            cout << "Opcion invalida.\n";
         }
 
-    } while (opcion != 2);
+    } while (opcion != '2');
 }
 
 // ========== INICIAR SESIÓN ==========
@@ -70,17 +72,18 @@ void udeaTunes::iniciarSesion() {
 
 // ========== MENÚ DE USUARIO ==========
 void udeaTunes::menuUsuario(usuario* u) {
-    int opcion;
+    char opcion;
     do {
-        cout << "\n===== MENÚ DE USUARIO =====\n";
-        cout << "1. Ver información personal\n";
-        cout << "2. Cerrar sesión\n";
-        cout << "Seleccione una opción: ";
+        cout << "\n===== MENU DE USUARIO =====\n";
+        cout << "1. Ver informacion personal\n";
+        cout << "2. Resproducir Musica\n";
+        cout << "3. Cerrar sesion\n";
+        cout << "Seleccione una opcion: ";
         cin >> opcion;
 
         switch (opcion) {
-        case 1:
-            cout << "\n--- Información de usuario ---\n";
+        case '1':
+            cout << "\n--- Informacion de usuario ---\n";
             cout << "Nickname: " << u->getNickname() << endl;
             cout << "Ciudad: " << u->getCiudad() << endl;
             cout << "País: " << u->getPais() << endl;
@@ -88,13 +91,17 @@ void udeaTunes::menuUsuario(usuario* u) {
             cout << "Tipo: " << (u->getPremium() ? "Premium" : "Estándar") << endl;
             break;
 
-        case 2:
-            cout << "Cerrando sesión...\n";
+        case '2':
+
+        case '3':
+            cout << "Cerrando sesion...\n";
             usuarioActual = nullptr;
             break;
 
         default:
-            cout << "Opción inválida.\n";
+            cout << "Opcion invalida.\n";
+
         }
-    } while (opcion != 2);
+
+    } while (opcion != '3');
 }
