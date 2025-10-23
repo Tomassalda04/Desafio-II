@@ -29,9 +29,8 @@ void cargarUsuarios(usuario*& usuarios, int& numUsuarios) {
         usuario nuevo(nick, ciudad, pais, fecha, premiumFlag == 1);
 
         usuario* temp = new usuario[numUsuarios + 1];
-        for (int i = 0; i < numUsuarios; i++){
+        for (int i = 0; i < numUsuarios; i++)
             temp[i] = usuarios[i];
-        }
         temp[numUsuarios] = nuevo;
 
         delete[] usuarios;
@@ -46,7 +45,7 @@ void cargarUsuarios(usuario*& usuarios, int& numUsuarios) {
 void agregarUsuario(usuario*& usuarios, int& numUsuarios) {
     string nick, ciudad, pais, fecha;
     char prem;
-    int premium=-1;
+    int premium = -1;
 
     cout << "\nIngrese nickname: ";
     cin >> nick;
@@ -58,7 +57,7 @@ void agregarUsuario(usuario*& usuarios, int& numUsuarios) {
     cin >> fecha;
     cout << "Es premium? (1=Si, 0=No): ";
     cin >> prem;
-    premium=verificarPremium(prem);
+    premium = verificarPremium(prem);
     usuario nuevo(nick, ciudad, pais, fecha, premium == 1);
 
     usuario* temp = new usuario[numUsuarios + 1];
@@ -74,7 +73,7 @@ void agregarUsuario(usuario*& usuarios, int& numUsuarios) {
 }
 
 void guardarUsuarios(usuario* usuarios, int numUsuarios) {
-    ofstream archivo("datos/usuarios.txt");
+    ofstream archivo("usuarios.txt");
     if (!archivo.is_open()) {
         cout << "No se pudo abrir usuarios.txt para escritura" << endl;
         return;
@@ -91,6 +90,10 @@ void guardarUsuarios(usuario* usuarios, int numUsuarios) {
     archivo.close();
     cout << "Usuarios guardados correctamente." << endl;
 }
+
+// ============================
+// Bloque de carga de artistas
+// ============================
 
 void cargarArtistas(artista*& artistas, int& numArtistas) {
     ifstream archivo("artistas.txt");
@@ -145,6 +148,10 @@ void cargarArtistas(artista*& artistas, int& numArtistas) {
     cout << "Artistas cargados: " << numArtistas << endl;
 }
 
+// ============================
+// Bloque de carga de publicidad
+// ============================
+
 void cargarPublicidad(publicidad*& mensajes, int& numMensajes) {
     ifstream archivo("datos/publicidad.txt");
     if (!archivo.is_open()) {
@@ -178,24 +185,61 @@ void cargarPublicidad(publicidad*& mensajes, int& numMensajes) {
     archivo.close();
     cout << "Mensajes publicitarios cargados: " << numMensajes << endl;
 }
-/*
-void guardarUsuarios(usuario* usuarios, int numUsuarios) {
-    ofstream archivo("datos/usuarios.txt");
-    if (!archivo.is_open()) {
-        cout << "️No se pudo abrir usuarios.txt para escritura" << endl;
-        return;
-    }
 
-    for (int i = 0; i < numUsuarios; i++) {
-        archivo << usuarios[i].getNickname() << ","
-                << usuarios[i].getCiudad() << ","
-                << usuarios[i].getPais() << ","
-                << usuarios[i].getFechaRegistro() << ","
-                << usuarios[i].getPremium() << "\n";
-    }
+// ============================
+// Bloque de menús de usuario
+// ============================
 
-    archivo.close();
-    cout << "Usuarios guardados correctamente." << endl;
+void menuUsuarioPremium(usuario* u) {
+    int opcion;
+    do {
+        cout << "\n===== MENU USUARIO PREMIUM =====\n";
+        cout << "1. Reproducir canción\n";
+        cout << "2. Pausar cancion\n";
+        cout << "3. Reanudar cancion\n";
+        cout << "4. Detener cancion\n";
+        cout << "5. Subir volumen\n";
+        cout << "6. Bajar volumen\n";
+        cout << "7. Activar/desactivar modo aleatorio\n";
+        cout << "8. Ver estado del reproductor\n";
+        cout << "9. Seguir a otro usuario Premium\n";
+        cout << "10. Ver favoritos del usuario seguido\n";
+        cout << "11. Cerrar sesion\n";
+        cout << "Seleccione una opcion: ";
+        cin >> opcion;
+
+        switch (opcion) {
+        case 9: cout << "[Función seguir usuario Premium aún no implementada]\n"; break;
+        case 10: cout << "[Función ver favoritos del usuario seguido aún no implementada]\n"; break;
+        case 11: cout << "Cerrando sesión...\n"; break;
+        default: cout << "Opción inválida.\n";
+        }
+    } while (opcion != 11);
 }
 
-*/
+void menuUsuarioEstandar(usuario* u, publicidad* anuncios, int numAnuncios) {
+    int opcion = 0;
+    do {
+        cout << "\n===== MENÚ USUARIO ESTÁNDAR =====\n";
+        cout << "1. Reproducir canción\n";
+        cout << "2. Pausar canción\n";
+        cout << "3. Reanudar canción\n";
+        cout << "4. Detener canción\n";
+        cout << "5. Subir volumen\n";
+        cout << "6. Bajar volumen\n";
+        cout << "7. Activar/desactivar modo aleatorio\n";
+        cout << "8. Ver estado del reproductor\n";
+        cout << "9. Cerrar sesión\n";
+        cout << "Seleccione una opción: ";
+        cin >> opcion;
+
+        switch (opcion) {
+        case 9:
+            cout << "Cerrando sesión...\n";
+            break;
+        default:
+            cout << "Opción inválida, intente de nuevo.\n";
+        }
+    } while (opcion != 9);
+}
+
