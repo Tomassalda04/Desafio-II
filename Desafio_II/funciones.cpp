@@ -29,9 +29,8 @@ void cargarUsuarios(usuario*& usuarios, int& numUsuarios) {
         usuario nuevo(nick, ciudad, pais, fecha, premiumFlag == 1);
 
         usuario* temp = new usuario[numUsuarios + 1];
-        for (int i = 0; i < numUsuarios; i++){
+        for (int i = 0; i < numUsuarios; i++)
             temp[i] = usuarios[i];
-        }
         temp[numUsuarios] = nuevo;
 
         delete[] usuarios;
@@ -46,7 +45,7 @@ void cargarUsuarios(usuario*& usuarios, int& numUsuarios) {
 void agregarUsuario(usuario*& usuarios, int& numUsuarios) {
     string nick, ciudad, pais, fecha;
     char prem;
-    int premium=-1;
+    int premium = -1;
 
     cout << "\nIngrese nickname: ";
     cin >> nick;
@@ -58,7 +57,7 @@ void agregarUsuario(usuario*& usuarios, int& numUsuarios) {
     cin >> fecha;
     cout << "Es premium? (1=Si, 0=No): ";
     cin >> prem;
-    premium=verificarPremium(prem);
+    premium = verificarPremium(prem);
     usuario nuevo(nick, ciudad, pais, fecha, premium == 1);
 
     usuario* temp = new usuario[numUsuarios + 1];
@@ -76,7 +75,7 @@ void agregarUsuario(usuario*& usuarios, int& numUsuarios) {
 void guardarUsuarios(usuario* usuarios, int numUsuarios) {
     ofstream archivo("usuarios.txt");
     if (!archivo.is_open()) {
-        cout << "⚠️ No se pudo abrir usuarios.txt para escritura" << endl;
+        cout << "No se pudo abrir usuarios.txt para escritura" << endl;
         return;
     }
 
@@ -92,10 +91,106 @@ void guardarUsuarios(usuario* usuarios, int numUsuarios) {
     cout << "Usuarios guardados correctamente." << endl;
 }
 
-void menuUsuarioPremium(usuario* u) {
-    //reproductor player;
-    //player.setUsuario(u); // Premium no recibe publicidad
+// ============================
+// Bloque de carga de artistas
+// ============================
 
+void cargarArtistas(artista*& artistas, int& numArtistas) {
+    ifstream archivo("artistas.txt");
+    if (!archivo.is_open()) {
+        cout << "No se pudo abrir artistas.txt" << endl;
+        return;
+    }
+
+    numArtistas = 0;
+    artistas = nullptr;
+
+    string linea;
+    bool primeraLinea = true;
+
+    while (getline(archivo, linea)) {
+        if (linea.empty()) continue;
+        if (primeraLinea && linea.find("id") != string::npos) {
+            primeraLinea = false;
+            continue;
+        }
+
+        stringstream ss(linea);
+        string id, nombre, pais;
+        string edadStr, seguidoresStr, posicionStr, numAlbumsStr;
+
+        getline(ss, id, ',');
+        getline(ss, nombre, ',');
+        getline(ss, pais, ',');
+        getline(ss, edadStr, ',');
+        getline(ss, seguidoresStr, ',');
+        getline(ss, posicionStr, ',');
+        getline(ss, numAlbumsStr, ',');
+
+        unsigned int edad = stoi(edadStr);
+        unsigned int seguidores = stoul(seguidoresStr);
+        unsigned int posicion = stoi(posicionStr);
+        unsigned int numAlbums = stoi(numAlbumsStr);
+
+        artista nuevo(id, nombre, pais, edad, seguidores, posicion, numAlbums);
+
+        artista* temp = new artista[numArtistas + 1];
+        for (int i = 0; i < numArtistas; i++)
+            temp[i] = artistas[i];
+        temp[numArtistas] = nuevo;
+
+        delete[] artistas;
+        artistas = temp;
+        numArtistas++;
+    }
+
+    archivo.close();
+    cout << "Artistas cargados: " << numArtistas << endl;
+}
+
+// ============================
+// Bloque de carga de publicidad
+// ============================
+
+void cargarPublicidad(publicidad*& mensajes, int& numMensajes) {
+    ifstream archivo("datos/publicidad.txt");
+    if (!archivo.is_open()) {
+        cout << "No se pudo abrir publicidad.txt" << endl;
+        return;
+    }
+
+    numMensajes = 0;
+    mensajes = nullptr;
+
+    string linea;
+    while (getline(archivo, linea)) {
+        string texto;
+        char categoria;
+
+        stringstream ss(linea);
+        getline(ss, texto, ',');
+        ss >> categoria;
+
+        publicidad nuevo(texto, categoria);
+
+        publicidad* temp = new publicidad[numMensajes + 1];
+        for (int i = 0; i < numMensajes; i++) temp[i] = mensajes[i];
+        temp[numMensajes] = nuevo;
+
+        delete[] mensajes;
+        mensajes = temp;
+        numMensajes++;
+    }
+
+    archivo.close();
+    cout << "Mensajes publicitarios cargados: " << numMensajes << endl;
+}
+
+// ============================
+// Bloque de menús de usuario
+// ============================
+
+void menuUsuarioPremium(usuario* u) {
     int opcion;
     do {
         cout << "\n===== MENU USUARIO PREMIUM =====\n";
@@ -114,14 +209,6 @@ void menuUsuarioPremium(usuario* u) {
         cin >> opcion;
 
         switch (opcion) {
-        //case 1: player.reproducir(nullptr); break;
-        //case 2: player.pausar(); break;
-        //case 3: player.reanudar(); break;
-        //case 4: player.detener(); break;
-        //case 5: player.subirVolumen(); break;
-        //case 6: player.bajarVolumen(); break;
-        //case 7: player.alternarAleatorio(); break;
-        //case 8: player.mostrarEstado(); break;
         case 9: cout << "[Función seguir usuario Premium aún no implementada]\n"; break;
         case 10: cout << "[Función ver favoritos del usuario seguido aún no implementada]\n"; break;
         case 11: cout << "Cerrando sesión...\n"; break;
@@ -131,10 +218,6 @@ void menuUsuarioPremium(usuario* u) {
 }
 
 void menuUsuarioEstandar(usuario* u, publicidad* anuncios, int numAnuncios) {
-    //reproductor player;
-    //player.setUsuario(u);
-    //player.setPublicidad(anuncios, numAnuncios);
-
     int opcion = 0;
     do {
         cout << "\n===== MENÚ USUARIO ESTÁNDAR =====\n";
@@ -151,43 +234,9 @@ void menuUsuarioEstandar(usuario* u, publicidad* anuncios, int numAnuncios) {
         cin >> opcion;
 
         switch (opcion) {
-        case 1:
-            // Por ahora no hay canciones reales, así que simulamos
-           // player.reproducir(nullptr);
-            break;
-
-        case 2:
-            //player.pausar();
-            break;
-
-        case 3:
-            //player.reanudar();
-            break;
-
-        case 4:
-            //player.detener();
-            break;
-
-        case 5:
-            //player.subirVolumen();
-            break;
-
-        case 6:
-            //player.bajarVolumen();
-            break;
-
-        case 7:
-            //player.alternarAleatorio();
-            break;
-
-        case 8:
-           // player.mostrarEstado();
-            break;
-
         case 9:
             cout << "Cerrando sesión...\n";
             break;
-
         default:
             cout << "Opción inválida, intente de nuevo.\n";
         }
