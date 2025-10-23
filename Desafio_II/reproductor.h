@@ -3,19 +3,35 @@
 #include "funciones.h"
 #include "cancion.h"
 #include "usuario.h"
+#include "publicidad.h"
 
 class reproductor
 {
 private:
-    cancion *actual;        // Puntero a la canción que se está reproduciendo actualmente
-    usuario *usuario;       // Puntero al usuario que está usando el reproductor
-    bool reproduciendo;     // true si hay una canción sonando
-    bool pausado;           // true si la canción está en pausa
-    bool aleatorio;         // true si está en modo aleatorio
-    int volumen;            // Nivel de volumen (0 a 100)
+    cancion *actual;
+    usuario *usr;
+    publicidad *anuncios;
+    int numAnuncios;
+    int contadorReproducciones;
+    bool reproduciendo;
+    bool pausado;
+    bool aleatorio;
+    int volumen;
 
 public:
     reproductor();
+    void setUsuario(usuario* u);
+    void setPublicidad(publicidad* a, int n);
+
+    void reproducir(cancion* c);
+    void pausar();
+    void reanudar();
+    void detener();
+
+    void subirVolumen();
+    void bajarVolumen();
+    void alternarAleatorio();
+    void mostrarEstado() const;
 };
 
 #endif // REPRODUCTOR_H

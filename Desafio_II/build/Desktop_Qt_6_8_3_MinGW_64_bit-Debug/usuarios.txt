@@ -1,0 +1,3 @@
+juan,Bogota,Colombia,2025-01-10,1
+maria,Medellin,Colombia,2024-12-05,0
+pedro,Cali,Colombia,2023-08-21,1
