@@ -20,4 +20,8 @@ void guardarUsuarios(usuario* usuarios, int numUsuarios);
 
 void agregarUsuario(usuario*& usuarios,int &numUsuarios);
 
+void menuUsuarioPremium(usuario* usr);
+
+void menuUsuarioEstandar(usuario* usr,int numPublicidad);
+
 #endif // FUNCIONES_H
