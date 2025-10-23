@@ -22,6 +22,6 @@ void agregarUsuario(usuario*& usuarios,int &numUsuarios);
 
 void menuUsuarioPremium(usuario* usr);
 
-void menuUsuarioEstandar(usuario* usr,int numPublicidad);
+void menuUsuarioEstandar(usuario* u, publicidad* anuncios, int numAnuncios);
 
 #endif // FUNCIONES_H

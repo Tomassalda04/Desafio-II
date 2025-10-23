@@ -5,17 +5,15 @@
 #include "artista.h"
 #include "publicidad.h"
 
-class udeaTunes
-{
+class udeaTunes {
 
 private:
-    usuario *usuarios;
+    usuario* usuarios;
     int numUsuarios;
+    artista* artistas;
     int numArtistas;
+    publicidad* mensajes;
     int numMensajes;
-    artista *artistas;
-    publicidad *mensajes;
-    usuario *usuarioActual;
 
 public:
     udeaTunes();
@@ -23,7 +21,7 @@ public:
 
     void menuPrincipal();
     void iniciarSesion();
-    void menuUsuario(usuario* actual);
+    void registrarUsuario();
 };
 
 #endif // UDEATUNES_H
