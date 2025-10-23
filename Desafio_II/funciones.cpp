@@ -92,77 +92,105 @@ void guardarUsuarios(usuario* usuarios, int numUsuarios) {
     cout << "Usuarios guardados correctamente." << endl;
 }
 
-/*
-void cargarArtistas(artista*& artistas, int& numArtistas) {
-    ifstream archivo("artistas.txt");
-    if (!archivo.is_open()) {
-        cout << "⚠️ No se pudo abrir artistas.txt" << endl;
-        return;
-    }
+void menuUsuarioPremium(usuario* u) {
+    //reproductor player;
+    //player.setUsuario(u); // Premium no recibe publicidad
 
-    numArtistas = 0;
-    artistas = nullptr;
+    int opcion;
+    do {
+        cout << "\n===== MENU USUARIO PREMIUM =====\n";
+        cout << "1. Reproducir canción\n";
+        cout << "2. Pausar cancion\n";
+        cout << "3. Reanudar cancion\n";
+        cout << "4. Detener cancion\n";
+        cout << "5. Subir volumen\n";
+        cout << "6. Bajar volumen\n";
+        cout << "7. Activar/desactivar modo aleatorio\n";
+        cout << "8. Ver estado del reproductor\n";
+        cout << "9. Seguir a otro usuario Premium\n";
+        cout << "10. Ver favoritos del usuario seguido\n";
+        cout << "11. Cerrar sesion\n";
+        cout << "Seleccione una opcion: ";
+        cin >> opcion;
 
-    string linea;
-    while (getline(archivo, linea)) {
-        stringstream ss(linea);
-        string id, nombre, pais;
-        unsigned int edad, seguidores, posicion, numAlbums;
-
-        getline(ss, id, ',');
-        getline(ss, nombre, ',');
-        getline(ss, pais, ',');
-        ss >> edad >> seguidores >> posicion >> numAlbums;
-
-        artista nuevo(id, nombre, pais, edad, seguidores, posicion, numAlbums);
-
-        artista* temp = new artista[numArtistas + 1];
-        for (int i = 0; i < numArtistas; i++) temp[i] = artistas[i];
-        temp[numArtistas] = nuevo;
-
-        delete[] artistas;
-        artistas = temp;
-        numArtistas++;
-    }
-
-    archivo.close();
-    cout << "✅ Artistas cargados: " << numArtistas << endl;
+        switch (opcion) {
+        //case 1: player.reproducir(nullptr); break;
+        //case 2: player.pausar(); break;
+        //case 3: player.reanudar(); break;
+        //case 4: player.detener(); break;
+        //case 5: player.subirVolumen(); break;
+        //case 6: player.bajarVolumen(); break;
+        //case 7: player.alternarAleatorio(); break;
+        //case 8: player.mostrarEstado(); break;
+        case 9: cout << "[Función seguir usuario Premium aún no implementada]\n"; break;
+        case 10: cout << "[Función ver favoritos del usuario seguido aún no implementada]\n"; break;
+        case 11: cout << "Cerrando sesión...\n"; break;
+        default: cout << "Opción inválida.\n";
+        }
+    } while (opcion != 11);
 }
 
-// -------------------- CARGAR PUBLICIDAD --------------------
-void cargarPublicidad(publicidad*& mensajes, int& numMensajes) {
-    ifstream archivo("publicidad.txt");
-    if (!archivo.is_open()) {
-        cout << "⚠️ No se pudo abrir publicidad.txt" << endl;
-        return;
-    }
+void menuUsuarioEstandar(usuario* u, publicidad* anuncios, int numAnuncios) {
+    //reproductor player;
+    //player.setUsuario(u);
+    //player.setPublicidad(anuncios, numAnuncios);
 
-    numMensajes = 0;
-    mensajes = nullptr;
+    int opcion = 0;
+    do {
+        cout << "\n===== MENÚ USUARIO ESTÁNDAR =====\n";
+        cout << "1. Reproducir canción\n";
+        cout << "2. Pausar canción\n";
+        cout << "3. Reanudar canción\n";
+        cout << "4. Detener canción\n";
+        cout << "5. Subir volumen\n";
+        cout << "6. Bajar volumen\n";
+        cout << "7. Activar/desactivar modo aleatorio\n";
+        cout << "8. Ver estado del reproductor\n";
+        cout << "9. Cerrar sesión\n";
+        cout << "Seleccione una opción: ";
+        cin >> opcion;
 
-    string linea;
-    while (getline(archivo, linea)) {
-        string texto;
-        char categoria;
+        switch (opcion) {
+        case 1:
+            // Por ahora no hay canciones reales, así que simulamos
+           // player.reproducir(nullptr);
+            break;
 
-        stringstream ss(linea);
-        getline(ss, texto, ',');
-        ss >> categoria;
+        case 2:
+            //player.pausar();
+            break;
 
-        publicidad nuevo(texto, categoria);
+        case 3:
+            //player.reanudar();
+            break;
 
-        publicidad* temp = new publicidad[numMensajes + 1];
-        for (int i = 0; i < numMensajes; i++) temp[i] = mensajes[i];
-        temp[numMensajes] = nuevo;
+        case 4:
+            //player.detener();
+            break;
 
-        delete[] mensajes;
-        mensajes = temp;
-        numMensajes++;
-    }
+        case 5:
+            //player.subirVolumen();
+            break;
 
-    archivo.close();
-    cout << " Mensajes publicitarios cargados: " << numMensajes << endl;
+        case 6:
+            //player.bajarVolumen();
+            break;
+
+        case 7:
+            //player.alternarAleatorio();
+            break;
+
+        case 8:
+           // player.mostrarEstado();
+            break;
+
+        case 9:
+            cout << "Cerrando sesión...\n";
+            break;
+
+        default:
+            cout << "Opción inválida, intente de nuevo.\n";
+        }
+    } while (opcion != 9);
 }
 
-
-*/
