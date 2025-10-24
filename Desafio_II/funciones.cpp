@@ -3,6 +3,7 @@
 #include "artista.h"
 #include "publicidad.h"
 #include "funcionesaux.h"
+#include "reproductor.h"
 
 void cargarUsuarios(usuario*& usuarios, int& numUsuarios) {
     ifstream archivo("usuarios.txt");
@@ -91,10 +92,6 @@ void guardarUsuarios(usuario* usuarios, int numUsuarios) {
     cout << "Usuarios guardados correctamente." << endl;
 }
 
-// ============================
-// Bloque de carga de artistas
-// ============================
-
 void cargarArtistas(artista*& artistas, int& numArtistas) {
     ifstream archivo("artistas.txt");
     if (!archivo.is_open()) {
@@ -148,12 +145,8 @@ void cargarArtistas(artista*& artistas, int& numArtistas) {
     cout << "Artistas cargados: " << numArtistas << endl;
 }
 
-// ============================
-// Bloque de carga de publicidad
-// ============================
-
 void cargarPublicidad(publicidad*& mensajes, int& numMensajes) {
-    ifstream archivo("datos/publicidad.txt");
+    ifstream archivo("publicidad.txt");
     if (!archivo.is_open()) {
         cout << "No se pudo abrir publicidad.txt" << endl;
         return;
@@ -164,6 +157,8 @@ void cargarPublicidad(publicidad*& mensajes, int& numMensajes) {
 
     string linea;
     while (getline(archivo, linea)) {
+        if (linea.empty()) continue;
+
         string texto;
         char categoria;
 
@@ -174,7 +169,8 @@ void cargarPublicidad(publicidad*& mensajes, int& numMensajes) {
         publicidad nuevo(texto, categoria);
 
         publicidad* temp = new publicidad[numMensajes + 1];
-        for (int i = 0; i < numMensajes; i++) temp[i] = mensajes[i];
+        for (int i = 0; i < numMensajes; i++)
+            temp[i] = mensajes[i];
         temp[numMensajes] = nuevo;
 
         delete[] mensajes;
@@ -186,39 +182,85 @@ void cargarPublicidad(publicidad*& mensajes, int& numMensajes) {
     cout << "Mensajes publicitarios cargados: " << numMensajes << endl;
 }
 
-// ============================
-// Bloque de menús de usuario
-// ============================
-
 void menuUsuarioPremium(usuario* u) {
-    int opcion;
+    reproductor player;
+    player.setUsuario(u);
+
+    char opcion;
     do {
         cout << "\n===== MENU USUARIO PREMIUM =====\n";
         cout << "1. Reproducir canción\n";
-        cout << "2. Pausar cancion\n";
-        cout << "3. Reanudar cancion\n";
-        cout << "4. Detener cancion\n";
+        cout << "2. Pausar canción\n";
+        cout << "3. Reanudar canción\n";
+        cout << "4. Detener canción\n";
         cout << "5. Subir volumen\n";
         cout << "6. Bajar volumen\n";
         cout << "7. Activar/desactivar modo aleatorio\n";
         cout << "8. Ver estado del reproductor\n";
-        cout << "9. Seguir a otro usuario Premium\n";
-        cout << "10. Ver favoritos del usuario seguido\n";
-        cout << "11. Cerrar sesion\n";
-        cout << "Seleccione una opcion: ";
+        cout << "9. Agregar canción a favoritos\n";
+        cout << "A. Seguir a otro usuario Premium\n";
+        cout << "B. Ver favoritos del usuario seguido\n";
+        cout << "C. Cerrar sesión\n";
+        cout << "Seleccione una opción: ";
         cin >> opcion;
+        opcion = toupper(opcion);
 
         switch (opcion) {
-        case 9: cout << "[Función seguir usuario Premium aún no implementada]\n"; break;
-        case 10: cout << "[Función ver favoritos del usuario seguido aún no implementada]\n"; break;
-        case 11: cout << "Cerrando sesión...\n"; break;
-        default: cout << "Opción inválida.\n";
+        case '1':
+            player.reproducir(nullptr);
+            break;
+        case '2':
+            player.pausar();
+            break;
+        case '3':
+            player.reanudar();
+            break;
+        case '4':
+            player.detener();
+            break;
+        case '5':
+            player.subirVolumen();
+            break;
+        case '6':
+            player.bajarVolumen();
+            break;
+        case '7':
+            player.alternarAleatorio();
+            break;
+        case '8':
+            player.mostrarEstado();
+            break;
+        case '9': {
+            cancion c("002", "Favorita Demo", "rutaA.mp3", "rutaB.mp3", 4.1);
+            u->agregarFavorito(&c);
+            break;
         }
-    } while (opcion != 11);
+        case 'A': {
+            cout << "Ingrese el nickname del usuario Premium a seguir: ";
+            string nombreSeguir;
+            cin >> nombreSeguir;
+            usuario otro(nombreSeguir, "Medellin", "Colombia", "2024-05-01", true);
+            u->seguirUsuario(&otro);
+            break;
+        }
+        case 'B':
+            u->mostrarFavoritosSeguido();
+            break;
+        case 'C':
+            cout << "Cerrando sesión...\n";
+            break;
+        default:
+            cout << "Opción inválida.\n";
+        }
+    } while (opcion != 'C');
 }
 
 void menuUsuarioEstandar(usuario* u, publicidad* anuncios, int numAnuncios) {
-    int opcion = 0;
+    reproductor player;
+    player.setUsuario(u);
+    player.setPublicidad(anuncios, numAnuncios);
+
+    char opcion;
     do {
         cout << "\n===== MENÚ USUARIO ESTÁNDAR =====\n";
         cout << "1. Reproducir canción\n";
@@ -234,12 +276,36 @@ void menuUsuarioEstandar(usuario* u, publicidad* anuncios, int numAnuncios) {
         cin >> opcion;
 
         switch (opcion) {
-        case 9:
+        case '1':
+            player.reproducir(nullptr);
+            break;
+        case '2':
+            player.pausar();
+            break;
+        case '3':
+            player.reanudar();
+            break;
+        case '4':
+            player.detener();
+            break;
+        case '5':
+            player.subirVolumen();
+            break;
+        case '6':
+            player.bajarVolumen();
+            break;
+        case '7':
+            player.alternarAleatorio();
+            break;
+        case '8':
+            player.mostrarEstado();
+            break;
+        case '9':
             cout << "Cerrando sesión...\n";
             break;
         default:
-            cout << "Opción inválida, intente de nuevo.\n";
+            cout << "Opción inválida.\n";
         }
-    } while (opcion != 9);
+    } while (opcion != '9');
 }
 

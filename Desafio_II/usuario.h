@@ -5,7 +5,6 @@
 
 class usuario
 {
-
 private:
     string nickname;
     string ciudad;
@@ -18,7 +17,7 @@ private:
 
 public:
     usuario();
-    usuario(string nickname,string ciudad,string pais,string fechaRegistro,bool premium);
+    usuario(string nickname, string ciudad, string pais, string fechaRegistro, bool premium);
 
     string getNickname() const;
     string getCiudad() const;
@@ -32,6 +31,11 @@ public:
     void setFechaRegistro(string nuevaFecha);
     void setPremium(bool actPremium);
 
+    void agregarFavorito(cancion* c);
+    void mostrarFavoritos() const;
+    void seguirUsuario(usuario* otro);
+    void mostrarFavoritosSeguido() const;
 };
+
 
 #endif // USUARIO_H
