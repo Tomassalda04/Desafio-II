@@ -5,6 +5,8 @@
 #include "funcionesaux.h"
 #include "colaborador.h"
 #include "creditos.h"
+#include "reproductor.h"
+
 using namespace std;
 
 void cargarUsuarios(usuario*& usuarios, int& numUsuarios) {
@@ -61,6 +63,7 @@ void agregarUsuario(usuario*& usuarios, int& numUsuarios) {
     cout << "Es premium? (1=Si, 0=No): ";
     cin >> prem;
     premium = verificarPremium(prem);
+
     usuario nuevo(nick, ciudad, pais, fecha, premium == 1);
 
     usuario* temp = new usuario[numUsuarios + 1];
@@ -190,6 +193,8 @@ void cargarPublicidad(publicidad*& mensajes, int& numMensajes) {
     cout << "Mensajes publicitarios cargados: " << numMensajes << endl;
 }
 
+// ===================== COLABORADORES Y CRÉDITOS =====================
+
 void cargarColaboradores(colaborador*& lista, int& numColab) {
     ifstream archivo("colaboradores.txt");
     if (!archivo.is_open()) {
@@ -238,29 +243,10 @@ void cargarColaboradores(colaborador*& lista, int& numColab) {
 
 colaborador* buscarColaboradorPorCodigo(colaborador* lista, int numColab, const string& codigo) {
     if (!lista) return nullptr;
-    for (int i = 0; i < numColab; ++i) {
-        if (lista[i].getCodigoAfiliacion() == codigo) return &lista[i];
-    }
+    for (int i = 0; i < numColab; ++i)
+        if (lista[i].getCodigoAfiliacion() == codigo)
+            return &lista[i];
     return nullptr;
-}
-
-string* splitTokens(const string& s, char sep, int& outCount) {
-    outCount = 0;
-    for (size_t i = 0; i < s.size(); ++i) if (s[i] == sep) outCount++;
-    outCount = outCount + ((s.empty()) ? 0 : 1);
-
-    if (outCount == 0) return nullptr;
-
-    string* arr = new string[outCount];
-    int idx = 0;
-    size_t start = 0;
-    for (size_t i = 0; i <= s.size(); ++i) {
-        if (i == s.size() || s[i] == sep) {
-            arr[idx++] = s.substr(start, i - start);
-            start = i + 1;
-        }
-    }
-    return arr;
 }
 
 void cargarCreditos(creditos*& listaCreditos, int& numCreditos, colaborador* colaboradores, int numColab) {
@@ -291,64 +277,33 @@ void cargarCreditos(creditos*& listaCreditos, int& numCreditos, colaborador* col
         getline(ss, mus, ',');
         getline(ss, comps, ',');
 
-        colaborador* productores = nullptr;
-        int nProd = 0;
-        stringstream sp(prods);
-        string cod;
-        while (getline(sp, cod, '|')) {
-            for (int i = 0; i < numColab; i++) {
-                if (colaboradores[i].getCodigoAfiliacion() == cod) {
-                    colaborador* temp = new colaborador[nProd + 1];
-                    for (int j = 0; j < nProd; j++)
-                        temp[j] = productores[j];
-                    temp[nProd] = colaboradores[i];
-                    delete[] productores;
-                    productores = temp;
-                    nProd++;
-                    break;
+        auto parseColabs = [&](string str) {
+            colaborador* arr = nullptr;
+            int count = 0;
+            stringstream s(str);
+            string cod;
+            while (getline(s, cod, '|')) {
+                for (int i = 0; i < numColab; i++) {
+                    if (colaboradores[i].getCodigoAfiliacion() == cod) {
+                        colaborador* temp = new colaborador[count + 1];
+                        for (int j = 0; j < count; j++) temp[j] = arr[j];
+                        temp[count] = colaboradores[i];
+                        delete[] arr;
+                        arr = temp;
+                        count++;
+                        break;
+                    }
                 }
             }
-        }
+            return pair{arr, count};
+        };
 
-        colaborador* musicos = nullptr;
-        int nMus = 0;
-        stringstream sm(mus);
-        while (getline(sm, cod, '|')) {
-            for (int i = 0; i < numColab; i++) {
-                if (colaboradores[i].getCodigoAfiliacion() == cod) {
-                    colaborador* temp = new colaborador[nMus + 1];
-                    for (int j = 0; j < nMus; j++)
-                        temp[j] = musicos[j];
-                    temp[nMus] = colaboradores[i];
-                    delete[] musicos;
-                    musicos = temp;
-                    nMus++;
-                    break;
-                }
-            }
-        }
-
-        colaborador* compositores = nullptr;
-        int nComp = 0;
-        stringstream sc(comps);
-        while (getline(sc, cod, '|')) {
-            for (int i = 0; i < numColab; i++) {
-                if (colaboradores[i].getCodigoAfiliacion() == cod) {
-                    colaborador* temp = new colaborador[nComp + 1];
-                    for (int j = 0; j < nComp; j++)
-                        temp[j] = compositores[j];
-                    temp[nComp] = colaboradores[i];
-                    delete[] compositores;
-                    compositores = temp;
-                    nComp++;
-                    break;
-                }
-            }
-        }
+        auto [productores, nProd] = parseColabs(prods);
+        auto [musicos, nMus] = parseColabs(mus);
+        auto [compositores, nComp] = parseColabs(comps);
 
         creditos nuevo(productores, nProd, musicos, nMus, compositores, nComp);
         creditos* temp = new creditos[numCreditos + 1];
-
         for (int i = 0; i < numCreditos; i++)
             temp[i] = listaCreditos[i];
         temp[numCreditos] = nuevo;
@@ -356,42 +311,93 @@ void cargarCreditos(creditos*& listaCreditos, int& numCreditos, colaborador* col
         delete[] listaCreditos;
         listaCreditos = temp;
         numCreditos++;
-
     }
 
     archivo.close();
     cout << "Créditos cargados: " << numCreditos << endl;
 }
 
+// ===================== MENÚS DE USUARIO =====================
+
 void menuUsuarioPremium(usuario* u) {
-    int opcion;
+    reproductor player;
+    player.setUsuario(u);
+
+    char opcion;
     do {
         cout << "\n===== MENU USUARIO PREMIUM =====\n";
         cout << "1. Reproducir canción\n";
-        cout << "2. Pausar cancion\n";
-        cout << "3. Reanudar cancion\n";
-        cout << "4. Detener cancion\n";
+        cout << "2. Pausar canción\n";
+        cout << "3. Reanudar canción\n";
+        cout << "4. Detener canción\n";
         cout << "5. Subir volumen\n";
         cout << "6. Bajar volumen\n";
         cout << "7. Activar/desactivar modo aleatorio\n";
         cout << "8. Ver estado del reproductor\n";
-        cout << "9. Seguir a otro usuario Premium\n";
-        cout << "10. Ver favoritos del usuario seguido\n";
-        cout << "11. Cerrar sesion\n";
-        cout << "Seleccione una opcion: ";
+        cout << "9. Agregar canción a favoritos\n";
+        cout << "A. Seguir a otro usuario Premium\n";
+        cout << "B. Ver favoritos del usuario seguido\n";
+        cout << "C. Cerrar sesión\n";
+        cout << "Seleccione una opción: ";
         cin >> opcion;
+        opcion = toupper(opcion);
 
         switch (opcion) {
-        case 9: cout << "[Función seguir usuario Premium aún no implementada]\n"; break;
-        case 10: cout << "[Función ver favoritos del usuario seguido aún no implementada]\n"; break;
-        case 11: cout << "Cerrando sesión...\n"; break;
-        default: cout << "Opción inválida.\n";
+        case '1':
+            player.reproducir(nullptr);
+            break;
+        case '2':
+            player.pausar();
+            break;
+        case '3':
+            player.reanudar();
+            break;
+        case '4':
+            player.detener();
+            break;
+        case '5':
+            player.subirVolumen();
+            break;
+        case '6':
+            player.bajarVolumen();
+            break;
+        case '7':
+            player.alternarAleatorio();
+            break;
+        case '8':
+            player.mostrarEstado();
+            break;
+        case '9': {
+            cancion c("002", "Favorita Demo", "rutaA.mp3", "rutaB.mp3", 4.1);
+            u->agregarFavorito(&c);
+            break;
         }
-    } while (opcion != 11);
+        case 'A': {
+            cout << "Ingrese el nickname del usuario Premium a seguir: ";
+            string nombreSeguir;
+            cin >> nombreSeguir;
+            usuario otro(nombreSeguir, "Medellin", "Colombia", "2024-05-01", true);
+            u->seguirUsuario(&otro);
+            break;
+        }
+        case 'B':
+            u->mostrarFavoritosSeguido();
+            break;
+        case 'C':
+            cout << "Cerrando sesión...\n";
+            break;
+        default:
+            cout << "Opción inválida.\n";
+        }
+    } while (opcion != 'C');
 }
 
 void menuUsuarioEstandar(usuario* u, publicidad* anuncios, int numAnuncios) {
-    int opcion = 0;
+    reproductor player;
+    player.setUsuario(u);
+    player.setPublicidad(anuncios, numAnuncios);
+
+    char opcion;
     do {
         cout << "\n===== MENÚ USUARIO ESTÁNDAR =====\n";
         cout << "1. Reproducir canción\n";
@@ -407,12 +413,37 @@ void menuUsuarioEstandar(usuario* u, publicidad* anuncios, int numAnuncios) {
         cin >> opcion;
 
         switch (opcion) {
-        case 9:
+        case '1':
+            player.reproducir(nullptr);
+            break;
+        case '2':
+            player.pausar();
+            break;
+        case '3':
+            player.reanudar();
+            break;
+        case '4':
+            player.detener();
+            break;
+        case '5':
+            player.subirVolumen();
+            break;
+        case '6':
+            player.bajarVolumen();
+            break;
+        case '7':
+            player.alternarAleatorio();
+            break;
+        case '8':
+            player.mostrarEstado();
+            break;
+        case '9':
             cout << "Cerrando sesión...\n";
             break;
         default:
-            cout << "Opción inválida, intente de nuevo.\n";
+            cout << "Opción inválida.\n";
         }
-    } while (opcion != 9);
+    } while (opcion != '9');
 }
+
 

@@ -2,9 +2,9 @@
 #define ALBUM_H
 
 #include "funciones.h"
-
+#include"cancion.h"
 class artista;
-class cancion;
+
 
 class album {
 

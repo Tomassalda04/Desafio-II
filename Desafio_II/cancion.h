@@ -4,7 +4,7 @@
 #include "funciones.h"
 #include "creditos.h"
 
-class album;
+class album; // declaración adelantada
 
 class cancion {
 private:
@@ -15,17 +15,20 @@ private:
     float duracion;
     int reproducciones;
     creditos* infoCreditos;
-    album* alb;
+    album* alb; // álbum al que pertenece
 
 public:
+    // Constructores
     cancion();
     cancion(string id, string nombre, string ruta128, string ruta320,
             float duracion, int reproducciones = 0, album* alb = nullptr);
 
+    // Copia y asignación
     cancion(const cancion& other);
     cancion& operator=(const cancion& other);
     ~cancion();
 
+    // Getters
     string getId() const;
     string getNombre() const;
     string getRuta128() const;
@@ -34,6 +37,7 @@ public:
     int getReproducciones() const;
     album* getAlbum() const;
 
+    // Setters
     void setId(const string& id);
     void setNombre(const string& nombre);
     void setRuta128(const string& ruta);
@@ -42,8 +46,10 @@ public:
     void setReproducciones(int rep);
     void setAlbum(album* alb);
 
+    // Mostrar info
     void mostrarInfo() const;
 };
 
 #endif // CANCION_H
+
 

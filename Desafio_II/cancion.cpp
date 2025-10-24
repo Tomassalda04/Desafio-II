@@ -82,4 +82,3 @@ void cancion::mostrarInfo() const {
          << "\nRuta (320 kbps): " << ruta320
          << endl;
 }
-

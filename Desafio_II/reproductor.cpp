@@ -1,4 +1,7 @@
 #include "reproductor.h"
+#include <iostream>
+#include <cstdlib>
+using namespace std;
 
 reproductor::reproductor() {
     actual = nullptr;
@@ -28,8 +31,7 @@ void reproductor::reproducir(cancion* c) {
     }
 
     if (c == nullptr) {
-        cout << "No hay canción seleccionada.\n";
-        return;
+        cout << "Reproduciendo canción simulada...\n";
     }
 
     if (!usr->getPremium()) {
@@ -37,7 +39,7 @@ void reproductor::reproducir(cancion* c) {
         if (contadorReproducciones % 2 == 0 && anuncios && numAnuncios > 0) {
             int idx = rand() % numAnuncios;
             cout << "\n--- ANUNCIO PUBLICITARIO ---\n";
-            anuncios[idx].mostrar();
+            anuncios[idx].mostrar(); // Usamos el método mostrar() de publicidad
             cout << "----------------------------\n";
         }
     }
@@ -46,7 +48,10 @@ void reproductor::reproducir(cancion* c) {
     reproduciendo = true;
     pausado = false;
 
-    cout << "Reproduciendo: [nombre de la canción]" << endl;
+    if(c != nullptr)
+        cout << "Reproduciendo: " << c->getNombre() << endl;
+    else
+        cout << "Reproduciendo canción de prueba\n";
 }
 
 void reproductor::pausar() {
@@ -96,12 +101,17 @@ void reproductor::alternarAleatorio() {
 
 void reproductor::mostrarEstado() const {
     cout << "\n--- ESTADO DEL REPRODUCTOR ---\n";
-    if (usr) cout << "Usuario: " << usr->getNickname() << " ("
-             << (usr->getPremium() ? "Premium" : "Estándar") << ")\n";
-    if (actual) cout << "Canción actual: [nombre de la canción]" << endl;
+    if (usr)
+        cout << "Usuario: " << usr->getNickname() << " (" << (usr->getPremium() ? "Premium" : "Estándar") << ")\n";
+    if (actual) {
+        cout << "Canción actual: " << actual->getNombre() << endl;
+    } else {
+        cout << "Canción actual: [simulada]\n";
+    }
     cout << "Reproduciendo: " << (reproduciendo ? "Sí" : "No") << endl;
     cout << "Pausado: " << (pausado ? "Sí" : "No") << endl;
     cout << "Modo aleatorio: " << (aleatorio ? "Activado" : "Desactivado") << endl;
     cout << "Volumen: " << volumen << "%" << endl;
     cout << "-------------------------------\n";
 }
+
