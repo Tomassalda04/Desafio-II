@@ -31,7 +31,6 @@ void reproductor::reproducir(cancion* c) {
         cout << "Reproduciendo canción simulada...\n"; // CAMBIO: simulación temporal
     }
 
-    // Si el usuario NO es Premium, mostrar anuncio cada 2 reproducciones
     if (!usr->getPremium()) {
         contadorReproducciones++;
         if (contadorReproducciones % 2 == 0 && anuncios && numAnuncios > 0) {

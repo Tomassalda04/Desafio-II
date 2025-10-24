@@ -3,7 +3,7 @@
 #include "artista.h"
 #include "publicidad.h"
 #include "funcionesaux.h"
-#include "reproductor.h"  // Necesario para usar el reproductor
+#include "reproductor.h"
 
 void cargarUsuarios(usuario*& usuarios, int& numUsuarios) {
     ifstream archivo("usuarios.txt");
@@ -30,9 +30,8 @@ void cargarUsuarios(usuario*& usuarios, int& numUsuarios) {
         usuario nuevo(nick, ciudad, pais, fecha, premiumFlag == 1);
 
         usuario* temp = new usuario[numUsuarios + 1];
-        for (int i = 0; i < numUsuarios; i++){
+        for (int i = 0; i < numUsuarios; i++)
             temp[i] = usuarios[i];
-        }
         temp[numUsuarios] = nuevo;
 
         delete[] usuarios;
@@ -47,7 +46,7 @@ void cargarUsuarios(usuario*& usuarios, int& numUsuarios) {
 void agregarUsuario(usuario*& usuarios, int& numUsuarios) {
     string nick, ciudad, pais, fecha;
     char prem;
-    int premium=-1;
+    int premium = -1;
 
     cout << "\nIngrese nickname: ";
     cin >> nick;
@@ -59,7 +58,7 @@ void agregarUsuario(usuario*& usuarios, int& numUsuarios) {
     cin >> fecha;
     cout << "Es premium? (1=Si, 0=No): ";
     cin >> prem;
-    premium=verificarPremium(prem);
+    premium = verificarPremium(prem);
     usuario nuevo(nick, ciudad, pais, fecha, premium == 1);
 
     usuario* temp = new usuario[numUsuarios + 1];
@@ -77,7 +76,7 @@ void agregarUsuario(usuario*& usuarios, int& numUsuarios) {
 void guardarUsuarios(usuario* usuarios, int numUsuarios) {
     ofstream archivo("usuarios.txt");
     if (!archivo.is_open()) {
-        cout << "⚠️ No se pudo abrir usuarios.txt para escritura" << endl;
+        cout << "No se pudo abrir usuarios.txt para escritura" << endl;
         return;
     }
 
@@ -93,13 +92,6 @@ void guardarUsuarios(usuario* usuarios, int numUsuarios) {
     cout << "Usuarios guardados correctamente." << endl;
 }
 
-<<<<<<< Updated upstream
-void menuUsuarioPremium(usuario* u) {
-    //reproductor player;
-    //player.setUsuario(u); // Premium no recibe publicidad
-
-    int opcion;
-=======
 void cargarArtistas(artista*& artistas, int& numArtistas) {
     ifstream archivo("artistas.txt");
     if (!archivo.is_open()) {
@@ -195,7 +187,6 @@ void menuUsuarioPremium(usuario* u) {
     player.setUsuario(u);
 
     char opcion;
->>>>>>> Stashed changes
     do {
         cout << "\n===== MENU USUARIO PREMIUM =====\n";
         cout << "1. Reproducir canción\n";
@@ -212,25 +203,10 @@ void menuUsuarioPremium(usuario* u) {
         cout << "C. Cerrar sesión\n";
         cout << "Seleccione una opción: ";
         cin >> opcion;
-        opcion = toupper(opcion); // Permite usar minúsculas o mayúsculas
+        opcion = toupper(opcion);
 
         switch (opcion) {
-<<<<<<< Updated upstream
-        //case 1: player.reproducir(nullptr); break;
-        //case 2: player.pausar(); break;
-        //case 3: player.reanudar(); break;
-        //case 4: player.detener(); break;
-        //case 5: player.subirVolumen(); break;
-        //case 6: player.bajarVolumen(); break;
-        //case 7: player.alternarAleatorio(); break;
-        //case 8: player.mostrarEstado(); break;
-        case 9: cout << "[Función seguir usuario Premium aún no implementada]\n"; break;
-        case 10: cout << "[Función ver favoritos del usuario seguido aún no implementada]\n"; break;
-        case 11: cout << "Cerrando sesión...\n"; break;
-        default: cout << "Opción inválida.\n";
-=======
         case '1':
-            cout << "[Simulación] Reproduciendo canción...\n";
             player.reproducir(nullptr);
             break;
         case '2':
@@ -258,7 +234,6 @@ void menuUsuarioPremium(usuario* u) {
             cancion c("002", "Favorita Demo", "rutaA.mp3", "rutaB.mp3", 4.1);
             u->agregarFavorito(&c);
             break;
->>>>>>> Stashed changes
         }
         case 'A': {
             cout << "Ingrese el nickname del usuario Premium a seguir: ";
@@ -275,24 +250,17 @@ void menuUsuarioPremium(usuario* u) {
             cout << "Cerrando sesión...\n";
             break;
         default:
-            cout << "Opción inválida, intente de nuevo.\n";
+            cout << "Opción inválida.\n";
         }
     } while (opcion != 'C');
 }
 
-
 void menuUsuarioEstandar(usuario* u, publicidad* anuncios, int numAnuncios) {
-<<<<<<< Updated upstream
-    //reproductor player;
-    //player.setUsuario(u);
-    //player.setPublicidad(anuncios, numAnuncios);
-=======
     reproductor player;
     player.setUsuario(u);
     player.setPublicidad(anuncios, numAnuncios);
->>>>>>> Stashed changes
 
-    int opcion = 0;
+    char opcion;
     do {
         cout << "\n===== MENÚ USUARIO ESTÁNDAR =====\n";
         cout << "1. Reproducir canción\n";
@@ -308,73 +276,36 @@ void menuUsuarioEstandar(usuario* u, publicidad* anuncios, int numAnuncios) {
         cin >> opcion;
 
         switch (opcion) {
-        case 1:
-<<<<<<< Updated upstream
-            // Por ahora no hay canciones reales, así que simulamos
-           // player.reproducir(nullptr);
-            break;
-
-        case 2:
-            //player.pausar();
-            break;
-
-        case 3:
-            //player.reanudar();
-            break;
-
-        case 4:
-            //player.detener();
-            break;
-
-        case 5:
-            //player.subirVolumen();
-            break;
-
-        case 6:
-            //player.bajarVolumen();
-            break;
-
-        case 7:
-            //player.alternarAleatorio();
-            break;
-
-        case 8:
-           // player.mostrarEstado();
-            break;
-
-=======
-            cout << "[Simulación] Reproduciendo canción...\n";
+        case '1':
             player.reproducir(nullptr);
             break;
-        case 2:
+        case '2':
             player.pausar();
             break;
-        case 3:
+        case '3':
             player.reanudar();
             break;
-        case 4:
+        case '4':
             player.detener();
             break;
-        case 5:
+        case '5':
             player.subirVolumen();
             break;
-        case 6:
+        case '6':
             player.bajarVolumen();
             break;
-        case 7:
+        case '7':
             player.alternarAleatorio();
             break;
-        case 8:
+        case '8':
             player.mostrarEstado();
             break;
->>>>>>> Stashed changes
-        case 9:
+        case '9':
             cout << "Cerrando sesión...\n";
             break;
-
         default:
-            cout << "Opción inválida, intente de nuevo.\n";
+            cout << "Opción inválida.\n";
         }
-    } while (opcion != 9);
+    } while (opcion != '9');
 }
 

@@ -1,8 +1,5 @@
 #include "artista.h"
 
-<<<<<<< Updated upstream
-artista::artista() {}
-=======
 artista::artista() {
     id = "";
     nombre = "";
@@ -12,8 +9,8 @@ artista::artista() {
 }
 
 artista::artista(string id, string nombre, string pais,
-    unsigned int edad, unsigned int seguidores,
-     unsigned int posicion, unsigned int numAlbums) {
+                 unsigned int edad, unsigned int seguidores,
+                 unsigned int posicion, unsigned int numAlbums) {
     this->id = id;
     this->nombre = nombre;
     this->pais = pais;
@@ -103,4 +100,3 @@ void artista::mostrarInfo() const {
          << "Posición global: " << posicion << "\n"
          << "Álbumes: " << numAlbums << "\n";
 }
->>>>>>> Stashed changes

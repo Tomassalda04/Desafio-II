@@ -8,8 +8,8 @@ udeaTunes::udeaTunes() {
 
 
     cargarUsuarios(usuarios, numUsuarios);
-    //cargarArtistas(artistas, numArtistas);
-    //cargarPublicidad(mensajes, numMensajes);
+    cargarArtistas(artistas, numArtistas);
+    cargarPublicidad(mensajes, numMensajes);
 }
 
 udeaTunes::~udeaTunes() {

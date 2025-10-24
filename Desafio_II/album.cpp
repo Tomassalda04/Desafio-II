@@ -1,8 +1,5 @@
 #include "album.h"
-<<<<<<< Updated upstream
-
-album::album() {}
-=======
+#include "cancion.h"
 #include "artista.h"
 
 album::album() {
@@ -17,7 +14,7 @@ album::album() {
 }
 
 album::album(string id, string nombre, string sello, string fecha,
-     int puntuacion, int numCanciones, artista* autor) {
+             int puntuacion, int numCanciones, artista* autor) {
     this->id = id;
     this->nombre = nombre;
     this->sello = sello;
@@ -106,4 +103,5 @@ void album::mostrarInfo() const {
          << "\nPuntuación: " << puntuacion
          << "\nNúmero de canciones: " << numCanciones << endl;
 }
->>>>>>> Stashed changes
+
+ 
