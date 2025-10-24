@@ -4,18 +4,27 @@ udeaTunes::udeaTunes() {
     usuarios = nullptr;
     artistas = nullptr;
     mensajes = nullptr;
-    numUsuarios = numArtistas = numMensajes = 0;
+    colaboradores = nullptr;
+    listaCreditos = nullptr;
 
+    numUsuarios = numArtistas = numMensajes = 0;
+    numColaboradores = numCreditos = 0;
 
     cargarUsuarios(usuarios, numUsuarios);
     cargarArtistas(artistas, numArtistas);
     cargarPublicidad(mensajes, numMensajes);
+
+    cargarColaboradores(colaboradores, numColaboradores);
+    cargarCreditos(listaCreditos, numCreditos, colaboradores, numColaboradores);
 }
+
 
 udeaTunes::~udeaTunes() {
     delete[] usuarios;
     delete[] artistas;
     delete[] mensajes;
+    delete[] colaboradores;
+    delete[] listaCreditos;
 }
 
 void udeaTunes::menuPrincipal() {
@@ -38,7 +47,7 @@ void udeaTunes::menuPrincipal() {
         default:
             cout << "Opcion invalida.\n";
         }
-    } while (opcion != 2);
+    } while (opcion != '2');
 }
 
 void udeaTunes::iniciarSesion() {

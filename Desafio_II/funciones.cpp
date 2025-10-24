@@ -3,6 +3,9 @@
 #include "artista.h"
 #include "publicidad.h"
 #include "funcionesaux.h"
+#include "colaborador.h"
+#include "creditos.h"
+using namespace std;
 
 void cargarUsuarios(usuario*& usuarios, int& numUsuarios) {
     ifstream archivo("usuarios.txt");
@@ -91,10 +94,6 @@ void guardarUsuarios(usuario* usuarios, int numUsuarios) {
     cout << "Usuarios guardados correctamente." << endl;
 }
 
-// ============================
-// Bloque de carga de artistas
-// ============================
-
 void cargarArtistas(artista*& artistas, int& numArtistas) {
     ifstream archivo("artistas.txt");
     if (!archivo.is_open()) {
@@ -148,12 +147,8 @@ void cargarArtistas(artista*& artistas, int& numArtistas) {
     cout << "Artistas cargados: " << numArtistas << endl;
 }
 
-// ============================
-// Bloque de carga de publicidad
-// ============================
-
 void cargarPublicidad(publicidad*& mensajes, int& numMensajes) {
-    ifstream archivo("datos/publicidad.txt");
+    ifstream archivo("publicidad.txt");
     if (!archivo.is_open()) {
         cout << "No se pudo abrir publicidad.txt" << endl;
         return;
@@ -163,18 +158,27 @@ void cargarPublicidad(publicidad*& mensajes, int& numMensajes) {
     mensajes = nullptr;
 
     string linea;
+    bool primeraLinea = true;
+
     while (getline(archivo, linea)) {
+        if (linea.empty()) continue;
+        if (primeraLinea && linea.find("texto") != string::npos) {
+            primeraLinea = false;
+            continue;
+        }
+
+        stringstream ss(linea);
         string texto;
         char categoria;
 
-        stringstream ss(linea);
         getline(ss, texto, ',');
         ss >> categoria;
 
         publicidad nuevo(texto, categoria);
 
         publicidad* temp = new publicidad[numMensajes + 1];
-        for (int i = 0; i < numMensajes; i++) temp[i] = mensajes[i];
+        for (int i = 0; i < numMensajes; i++)
+            temp[i] = mensajes[i];
         temp[numMensajes] = nuevo;
 
         delete[] mensajes;
@@ -186,9 +190,178 @@ void cargarPublicidad(publicidad*& mensajes, int& numMensajes) {
     cout << "Mensajes publicitarios cargados: " << numMensajes << endl;
 }
 
-// ============================
-// Bloque de menús de usuario
-// ============================
+void cargarColaboradores(colaborador*& lista, int& numColab) {
+    ifstream archivo("colaboradores.txt");
+    if (!archivo.is_open()) {
+        cout << "No se pudo abrir colaboradores.txt" << endl;
+        lista = nullptr;
+        numColab = 0;
+        return;
+    }
+
+    numColab = 0;
+    lista = nullptr;
+
+    string linea;
+    bool primeraLinea = true;
+
+    while (getline(archivo, linea)) {
+        if (linea.empty()) continue;
+        if (primeraLinea && linea.find("codigoAfiliacion") != string::npos) {
+            primeraLinea = false;
+            continue;
+        }
+
+        stringstream ss(linea);
+        string codigo, nombre, apellido;
+        getline(ss, codigo, ',');
+        getline(ss, nombre, ',');
+        getline(ss, apellido, ',');
+
+        colaborador nuevo;
+        nuevo.setCodigoAfiliacion(codigo);
+        nuevo.setNombre(nombre);
+        nuevo.setApellido(apellido);
+
+        colaborador* temp = new colaborador[numColab + 1];
+        for (int i = 0; i < numColab; ++i) temp[i] = lista[i];
+        temp[numColab] = nuevo;
+
+        delete[] lista;
+        lista = temp;
+        numColab++;
+    }
+
+    archivo.close();
+    cout << "Colaboradores cargados: " << numColab << endl;
+}
+
+colaborador* buscarColaboradorPorCodigo(colaborador* lista, int numColab, const string& codigo) {
+    if (!lista) return nullptr;
+    for (int i = 0; i < numColab; ++i) {
+        if (lista[i].getCodigoAfiliacion() == codigo) return &lista[i];
+    }
+    return nullptr;
+}
+
+string* splitTokens(const string& s, char sep, int& outCount) {
+    outCount = 0;
+    for (size_t i = 0; i < s.size(); ++i) if (s[i] == sep) outCount++;
+    outCount = outCount + ((s.empty()) ? 0 : 1);
+
+    if (outCount == 0) return nullptr;
+
+    string* arr = new string[outCount];
+    int idx = 0;
+    size_t start = 0;
+    for (size_t i = 0; i <= s.size(); ++i) {
+        if (i == s.size() || s[i] == sep) {
+            arr[idx++] = s.substr(start, i - start);
+            start = i + 1;
+        }
+    }
+    return arr;
+}
+
+void cargarCreditos(creditos*& listaCreditos, int& numCreditos, colaborador* colaboradores, int numColab) {
+    ifstream archivo("creditos.txt");
+    if (!archivo.is_open()) {
+        cout << "No se pudo abrir creditos.txt" << endl;
+        return;
+    }
+
+    numCreditos = 0;
+    listaCreditos = nullptr;
+
+    string linea;
+    bool primeraLinea = true;
+
+    while (getline(archivo, linea)) {
+        if (linea.empty()) continue;
+        if (primeraLinea && linea.find("id") != string::npos) {
+            primeraLinea = false;
+            continue;
+        }
+
+        stringstream ss(linea);
+        string idCred, prods, mus, comps;
+
+        getline(ss, idCred, ',');
+        getline(ss, prods, ',');
+        getline(ss, mus, ',');
+        getline(ss, comps, ',');
+
+        colaborador* productores = nullptr;
+        int nProd = 0;
+        stringstream sp(prods);
+        string cod;
+        while (getline(sp, cod, '|')) {
+            for (int i = 0; i < numColab; i++) {
+                if (colaboradores[i].getCodigoAfiliacion() == cod) {
+                    colaborador* temp = new colaborador[nProd + 1];
+                    for (int j = 0; j < nProd; j++)
+                        temp[j] = productores[j];
+                    temp[nProd] = colaboradores[i];
+                    delete[] productores;
+                    productores = temp;
+                    nProd++;
+                    break;
+                }
+            }
+        }
+
+        colaborador* musicos = nullptr;
+        int nMus = 0;
+        stringstream sm(mus);
+        while (getline(sm, cod, '|')) {
+            for (int i = 0; i < numColab; i++) {
+                if (colaboradores[i].getCodigoAfiliacion() == cod) {
+                    colaborador* temp = new colaborador[nMus + 1];
+                    for (int j = 0; j < nMus; j++)
+                        temp[j] = musicos[j];
+                    temp[nMus] = colaboradores[i];
+                    delete[] musicos;
+                    musicos = temp;
+                    nMus++;
+                    break;
+                }
+            }
+        }
+
+        colaborador* compositores = nullptr;
+        int nComp = 0;
+        stringstream sc(comps);
+        while (getline(sc, cod, '|')) {
+            for (int i = 0; i < numColab; i++) {
+                if (colaboradores[i].getCodigoAfiliacion() == cod) {
+                    colaborador* temp = new colaborador[nComp + 1];
+                    for (int j = 0; j < nComp; j++)
+                        temp[j] = compositores[j];
+                    temp[nComp] = colaboradores[i];
+                    delete[] compositores;
+                    compositores = temp;
+                    nComp++;
+                    break;
+                }
+            }
+        }
+
+        creditos nuevo(productores, nProd, musicos, nMus, compositores, nComp);
+        creditos* temp = new creditos[numCreditos + 1];
+
+        for (int i = 0; i < numCreditos; i++)
+            temp[i] = listaCreditos[i];
+        temp[numCreditos] = nuevo;
+
+        delete[] listaCreditos;
+        listaCreditos = temp;
+        numCreditos++;
+
+    }
+
+    archivo.close();
+    cout << "Créditos cargados: " << numCreditos << endl;
+}
 
 void menuUsuarioPremium(usuario* u) {
     int opcion;

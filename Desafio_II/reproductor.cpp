@@ -37,7 +37,7 @@ void reproductor::reproducir(cancion* c) {
         if (contadorReproducciones % 2 == 0 && anuncios && numAnuncios > 0) {
             int idx = rand() % numAnuncios;
             cout << "\n--- ANUNCIO PUBLICITARIO ---\n";
-            cout << "Categoria: " << "C" << " | " << "Mensaje: [texto anuncio simulado]" << endl;
+            anuncios[idx].mostrar();
             cout << "----------------------------\n";
         }
     }
