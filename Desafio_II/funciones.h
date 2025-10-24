@@ -9,6 +9,8 @@ using namespace std;
 class usuario;
 class artista;
 class publicidad;
+class colaborador;
+class creditos;
 
 void cargarUsuarios(usuario*& usuarios, int& numUsuarios);
 
@@ -23,5 +25,10 @@ void agregarUsuario(usuario*& usuarios,int &numUsuarios);
 void menuUsuarioPremium(usuario* usr);
 
 void menuUsuarioEstandar(usuario* u, publicidad* anuncios, int numAnuncios);
+
+void cargarColaboradores(colaborador*& lista, int& numColab);
+
+void cargarCreditos(creditos*& listaCreditos, int& numCreditos, colaborador* colaboradores, int numColab);
+
 
 #endif // FUNCIONES_H

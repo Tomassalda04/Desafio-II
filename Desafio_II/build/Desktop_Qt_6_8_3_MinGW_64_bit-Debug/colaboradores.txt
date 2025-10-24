@@ -1,0 +1,8 @@
+COD01,Shakira,Mebarak
+COD02,Carlos,Vives
+COD03,Feid,Lozano
+COD04,Ovy,OnTheDrums
+COD05,Andres,Castro
+COD06,Mario,Dom
+COD07,Sky,Rompiendo
+COD08,Mike,Bahía

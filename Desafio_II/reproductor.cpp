@@ -1,4 +1,7 @@
 #include "reproductor.h"
+#include <iostream>
+#include <cstdlib>
+using namespace std;
 
 reproductor::reproductor() {
     actual = nullptr;
@@ -28,7 +31,7 @@ void reproductor::reproducir(cancion* c) {
     }
 
     if (c == nullptr) {
-        cout << "Reproduciendo canción simulada...\n"; // CAMBIO: simulación temporal
+        cout << "Reproduciendo canción simulada...\n";
     }
 
     if (!usr->getPremium()) {
@@ -36,8 +39,7 @@ void reproductor::reproducir(cancion* c) {
         if (contadorReproducciones % 2 == 0 && anuncios && numAnuncios > 0) {
             int idx = rand() % numAnuncios;
             cout << "\n--- ANUNCIO PUBLICITARIO ---\n";
-            cout << "Categoría: " << anuncios[idx].getCategoria()
-                 << " | Mensaje: " << anuncios[idx].getTexto() << endl;
+            anuncios[idx].mostrar(); // Usamos el método mostrar() de publicidad
             cout << "----------------------------\n";
         }
     }
@@ -46,8 +48,10 @@ void reproductor::reproducir(cancion* c) {
     reproduciendo = true;
     pausado = false;
 
-    cout << "Reproduciendo: " << c->getNombre() << endl; // COMENTADO por Daniel
-    cout << "Reproduciendo canción de prueba\n";
+    if(c != nullptr)
+        cout << "Reproduciendo: " << c->getNombre() << endl;
+    else
+        cout << "Reproduciendo canción de prueba\n";
 }
 
 void reproductor::pausar() {
@@ -99,10 +103,9 @@ void reproductor::mostrarEstado() const {
     cout << "\n--- ESTADO DEL REPRODUCTOR ---\n";
     if (usr)
         cout << "Usuario: " << usr->getNickname() << " (" << (usr->getPremium() ? "Premium" : "Estándar") << ")\n";
-    if (actual){
+    if (actual) {
         cout << "Canción actual: " << actual->getNombre() << endl;
-    }
-    else{
+    } else {
         cout << "Canción actual: [simulada]\n";
     }
     cout << "Reproduciendo: " << (reproduciendo ? "Sí" : "No") << endl;

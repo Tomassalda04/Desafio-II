@@ -14,6 +14,11 @@ private:
     int numArtistas;
     publicidad* mensajes;
     int numMensajes;
+    colaborador* colaboradores;
+    int numColaboradores;
+    creditos* listaCreditos;
+    int numCreditos;
+
 
 public:
     udeaTunes();
