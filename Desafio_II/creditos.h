@@ -2,42 +2,39 @@
 #define CREDITOS_H
 
 #include "colaborador.h"
+using namespace std;
 
 class creditos {
 private:
     colaborador* productores;
     colaborador* musicos;
     colaborador* compositores;
-    int cantProd, cantMus, cantComp;
+    int cantProd;
+    int cantMus;
+    int cantComp;
 
 public:
-    creditos();  // Constructor por defecto
-    creditos(colaborador* prod, int nProd,
-             colaborador* mus, int nMus,
-             colaborador* comp, int nComp);  // Constructor con parámetros
+    creditos();
+    creditos(colaborador* prod, int nProd, colaborador* mus, int nMus, colaborador* comp, int nComp);
+    creditos(const creditos& other);
+    creditos& operator=(const creditos& other);
+    ~creditos();
 
-    creditos(const creditos& other);          // Constructor de copia
-    creditos& operator=(const creditos& other); // Asignación
-    ~creditos();                              // Destructor
-
+    // Setters
     void setProductores(colaborador* p, int n);
     void setMusicos(colaborador* m, int n);
     void setCompositores(colaborador* c, int n);
 
-    void setCantProd(int n);
-    void setCantMus(int n);
-    void setCantComp(int n);
-
+    // Getters
     colaborador* getProductores() const;
     colaborador* getMusicos() const;
     colaborador* getCompositores() const;
-
     int getCantProd() const;
     int getCantMus() const;
     int getCantComp() const;
 
-    void mostrar() const; // 👈 Faltaba esta
+    // Otros
+    void mostrar() const;
 };
 
-#endif // CREDITOS_H
-
+#endif

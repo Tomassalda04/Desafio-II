@@ -1,3 +1,4 @@
-AR001,Shakira,Colombia,47,10000000,1,5
-AR002,CarlosVives,Colombia,62,8000000,2,3
-AR003,Feid,Colombia,32,6000000,3,2
+AR001,Shakira,Colombia,47,70000000,1,2
+AR002,Ed Sheeran,UK,33,55000000,2,2
+AR003,The Weeknd,Canada,34,50000000,3,2
+AR004,Bad Bunny,Puerto Rico,30,60000000,4,2

@@ -1,3 +1,6 @@
-Compra el nuevo plan Premium,A
-Escucha sin interrupciones con Premium,B
-Aprovecha el descuento de mitad de año,C
+"Compra el nuevo plan Premium",A
+"Aprovecha el descuento de mitad de año",C
+"Escucha UdeATunes Premium sin interrupciones",A
+"Descubre lo nuevo de Shakira en UdeATunes",B
+"Sube de nivel: elimina los anuncios con Premium",A
+"Explora playlists de Bad Bunny esta semana",B

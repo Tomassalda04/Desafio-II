@@ -1,4 +1,5 @@
 #include "artista.h"
+using namespace std;
 
 artista::artista() {
     id = "";
@@ -8,9 +9,7 @@ artista::artista() {
     albums = nullptr;
 }
 
-artista::artista(string id, string nombre, string pais,
-                 unsigned int edad, unsigned int seguidores,
-                 unsigned int posicion, unsigned int numAlbums) {
+artista::artista(string id, string nombre, string pais, unsigned int edad, unsigned int seguidores, unsigned int posicion, unsigned int numAlbums) {
     this->id = id;
     this->nombre = nombre;
     this->pais = pais;
@@ -29,10 +28,10 @@ artista::artista(const artista& other) {
     seguidores = other.seguidores;
     posicion = other.posicion;
     numAlbums = other.numAlbums;
+
     if (numAlbums > 0) {
         albums = new album[numAlbums];
-        for (unsigned int i = 0; i < numAlbums; i++)
-            albums[i] = other.albums[i];
+        for (unsigned int i = 0; i < numAlbums; i++) albums[i] = other.albums[i];
     } else {
         albums = nullptr;
     }
@@ -55,8 +54,7 @@ artista& artista::operator=(const artista& other) {
 
         if (numAlbums > 0) {
             albums = new album[numAlbums];
-            for (unsigned int i = 0; i < numAlbums; i++)
-                albums[i] = other.albums[i];
+            for (unsigned int i = 0; i < numAlbums; i++) albums[i] = other.albums[i];
         } else {
             albums = nullptr;
         }
@@ -83,8 +81,7 @@ void artista::setNumAlbums(unsigned int n) { numAlbums = n; }
 
 void artista::agregarAlbum(const album& nuevo) {
     album* temp = new album[numAlbums + 1];
-    for (unsigned int i = 0; i < numAlbums; i++)
-        temp[i] = albums[i];
+    for (unsigned int i = 0; i < numAlbums; i++) temp[i] = albums[i];
     temp[numAlbums] = nuevo;
     delete[] albums;
     albums = temp;
@@ -94,9 +91,9 @@ void artista::agregarAlbum(const album& nuevo) {
 void artista::mostrarInfo() const {
     cout << "ID: " << id << "\n"
          << "Nombre: " << nombre << "\n"
-         << "País: " << pais << "\n"
+         << "Pais: " << pais << "\n"
          << "Edad: " << edad << "\n"
          << "Seguidores: " << seguidores << "\n"
-         << "Posición global: " << posicion << "\n"
-         << "Álbumes: " << numAlbums << "\n";
+         << "Posicion global: " << posicion << "\n"
+         << "Albums: " << numAlbums << "\n";
 }

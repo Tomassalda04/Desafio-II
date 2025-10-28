@@ -9,9 +9,7 @@ creditos::creditos() {
     cantProd = cantMus = cantComp = 0;
 }
 
-creditos::creditos(colaborador* prod, int nProd,
-                   colaborador* mus, int nMus,
-                   colaborador* comp, int nComp) {
+creditos::creditos(colaborador* prod, int nProd, colaborador* mus, int nMus, colaborador* comp, int nComp) {
     cantProd = nProd;
     cantMus = nMus;
     cantComp = nComp;
@@ -34,12 +32,9 @@ creditos::creditos(const creditos& other) {
     musicos = (cantMus > 0) ? new colaborador[cantMus] : nullptr;
     compositores = (cantComp > 0) ? new colaborador[cantComp] : nullptr;
 
-    for (int i = 0; i < cantProd; i++)
-        productores[i] = other.productores[i];
-    for (int i = 0; i < cantMus; i++)
-        musicos[i] = other.musicos[i];
-    for (int i = 0; i < cantComp; i++)
-        compositores[i] = other.compositores[i];
+    for (int i = 0; i < cantProd; i++) productores[i] = other.productores[i];
+    for (int i = 0; i < cantMus; i++) musicos[i] = other.musicos[i];
+    for (int i = 0; i < cantComp; i++) compositores[i] = other.compositores[i];
 }
 
 creditos& creditos::operator=(const creditos& other) {
@@ -56,12 +51,9 @@ creditos& creditos::operator=(const creditos& other) {
         musicos = (cantMus > 0) ? new colaborador[cantMus] : nullptr;
         compositores = (cantComp > 0) ? new colaborador[cantComp] : nullptr;
 
-        for (int i = 0; i < cantProd; i++)
-            productores[i] = other.productores[i];
-        for (int i = 0; i < cantMus; i++)
-            musicos[i] = other.musicos[i];
-        for (int i = 0; i < cantComp; i++)
-            compositores[i] = other.compositores[i];
+        for (int i = 0; i < cantProd; i++) productores[i] = other.productores[i];
+        for (int i = 0; i < cantMus; i++) musicos[i] = other.musicos[i];
+        for (int i = 0; i < cantComp; i++) compositores[i] = other.compositores[i];
     }
     return *this;
 }
@@ -80,8 +72,30 @@ colaborador* creditos::getProductores() const { return productores; }
 colaborador* creditos::getMusicos() const { return musicos; }
 colaborador* creditos::getCompositores() const { return compositores; }
 
+void creditos::setProductores(colaborador* p, int n) {
+    delete[] productores;
+    cantProd = n;
+    productores = (n > 0) ? new colaborador[n] : nullptr;
+    for (int i = 0; i < n; ++i) productores[i] = p[i];
+}
+
+void creditos::setMusicos(colaborador* m, int n) {
+    delete[] musicos;
+    cantMus = n;
+    musicos = (n > 0) ? new colaborador[n] : nullptr;
+    for (int i = 0; i < n; ++i) musicos[i] = m[i];
+}
+
+void creditos::setCompositores(colaborador* c, int n) {
+    delete[] compositores;
+    cantComp = n;
+    compositores = (n > 0) ? new colaborador[n] : nullptr;
+    for (int i = 0; i < n; ++i) compositores[i] = c[i];
+}
+
 void creditos::mostrar() const {
     cout << "Productores: " << cantProd
-         << ", Músicos: " << cantMus
+         << ", Musicos: " << cantMus
          << ", Compositores: " << cantComp << endl;
 }
+

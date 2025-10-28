@@ -1,3 +1,8 @@
-ALB01,DondeEstanLosLadrones,Pop|Latino|Rock,Sony,1998-09-29,9,12
-ALB02,LaTierraDelOlvido,Pop|Vallenato,EMI,1995-08-20,8,10
-ALB03,FelizCumpleañosFerxxo,Reggaeton|Urbano,Universal,2022-09-01,10,14
+A001,El Dorado,Pop|Latino|Reggaeton,Sony Music Latin,2017-05-26,90,3,AR001
+A002,Oral Fixation Vol.2,Pop|Rock|Dance,Sony Music,2005-11-28,92,3,AR001
+A003,Divide,Pop|Acoustic|Ballad|Folk,Atlantic,2017-03-03,95,3,AR002
+A004,Equals,Pop|Alternative|Ballad,Atlantic,2021-10-29,88,3,AR002
+A005,After Hours,Synthpop|R&B|Electropop,Republic,2020-03-20,93,3,AR003
+A006,Dawn FM,Synthpop|Disco|Electronic|Pop,Republic,2022-01-07,91,3,AR003
+A007,Un Verano Sin Ti,Reggaeton|Latin|Trap|Pop,Rimas Entertainment,2022-05-06,96,3,AR004
+A008,YHLQMDLG,Reggaeton|Trap|Urbano|Pop,Rimas Entertainment,2020-02-29,94,3,AR004

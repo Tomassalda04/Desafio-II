@@ -1,0 +1,3 @@
+tomas,C019,C020,C021,C022,C023,C024
+maria,C003
+daniel,C010

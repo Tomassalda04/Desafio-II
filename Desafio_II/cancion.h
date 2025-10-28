@@ -3,8 +3,9 @@
 
 #include "funciones.h"
 #include "creditos.h"
+using namespace std;
 
-class album; // declaración adelantada
+class album;
 
 class cancion {
 private:
@@ -15,15 +16,11 @@ private:
     float duracion;
     int reproducciones;
     creditos* infoCreditos;
-    album* alb; // álbum al que pertenece
+    album* alb;
 
 public:
-    // Constructores
     cancion();
-    cancion(string id, string nombre, string ruta128, string ruta320,
-            float duracion, int reproducciones = 0, album* alb = nullptr);
-
-    // Copia y asignación
+    cancion(string id, string nombre, string ruta128, string ruta320, float duracion, int reproducciones = 0, album* alb = nullptr);
     cancion(const cancion& other);
     cancion& operator=(const cancion& other);
     ~cancion();
@@ -46,10 +43,8 @@ public:
     void setReproducciones(int rep);
     void setAlbum(album* alb);
 
-    // Mostrar info
+    // Mostrar
     void mostrarInfo() const;
 };
 
-#endif // CANCION_H
-
-
+#endif

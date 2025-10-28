@@ -1,7 +1,7 @@
-#include "udeaTunes.h"
+#include "udeatunes.h"
 
 int main() {
-    udeaTunes app;
+    udeatunes app;
     app.menuPrincipal();
     system("pause");
     return 0;

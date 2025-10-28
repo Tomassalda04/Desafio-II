@@ -163,12 +163,18 @@ compiler_clean: compiler_moc_predefs_clean
 ####### Compile
 
 debug/album.o: ../../album.cpp ../../album.h \
-		../../funciones.h
+		../../funciones.h \
+		../../cancion.h \
+		../../creditos.h \
+		../../colaborador.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug\album.o ..\..\album.cpp
 
 debug/artista.o: ../../artista.cpp ../../artista.h \
 		../../funciones.h \
-		../../album.h
+		../../album.h \
+		../../cancion.h \
+		../../creditos.h \
+		../../colaborador.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug\artista.o ..\..\artista.cpp
 
 debug/cancion.o: ../../cancion.cpp ../../cancion.h \
@@ -192,8 +198,8 @@ debug/funciones.o: ../../funciones.cpp ../../funciones.h \
 		../../cancion.h \
 		../../creditos.h \
 		../../colaborador.h \
-		../../album.h \
 		../../artista.h \
+		../../album.h \
 		../../publicidad.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug\funciones.o ..\..\funciones.cpp
 
@@ -207,8 +213,8 @@ debug/main.o: ../../main.cpp ../../udeaTunes.h \
 		../../cancion.h \
 		../../creditos.h \
 		../../colaborador.h \
-		../../album.h \
 		../../artista.h \
+		../../album.h \
 		../../publicidad.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug\main.o ..\..\main.cpp
 
@@ -221,8 +227,10 @@ debug/reproductor.o: ../../reproductor.cpp ../../reproductor.h \
 		../../cancion.h \
 		../../creditos.h \
 		../../colaborador.h \
+		../../usuario.h \
+		../../publicidad.h \
 		../../album.h \
-		../../usuario.h
+		../../artista.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug\reproductor.o ..\..\reproductor.cpp
 
 debug/udeatunes.o: ../../udeatunes.cpp ../../udeaTunes.h \
@@ -231,8 +239,8 @@ debug/udeatunes.o: ../../udeatunes.cpp ../../udeaTunes.h \
 		../../cancion.h \
 		../../creditos.h \
 		../../colaborador.h \
-		../../album.h \
 		../../artista.h \
+		../../album.h \
 		../../publicidad.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug\udeatunes.o ..\..\udeatunes.cpp
 
@@ -240,8 +248,7 @@ debug/usuario.o: ../../usuario.cpp ../../usuario.h \
 		../../funciones.h \
 		../../cancion.h \
 		../../creditos.h \
-		../../colaborador.h \
-		../../album.h
+		../../colaborador.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug\usuario.o ..\..\usuario.cpp
 
 ####### Install

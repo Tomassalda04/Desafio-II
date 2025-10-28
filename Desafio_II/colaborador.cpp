@@ -1,6 +1,6 @@
 #include "colaborador.h"
+using namespace std;
 
-// Constructores
 colaborador::colaborador() {
     nombre = "";
     apellido = "";
@@ -13,11 +13,26 @@ colaborador::colaborador(const string& codigo, const string& nombre, const strin
     this->apellido = apellido;
 }
 
-string colaborador::getNombre() const { return nombre; }
-string colaborador::getApellido() const { return apellido; }
-string colaborador::getCodigoAfiliacion() const { return codigoAfiliacion; }
+string colaborador::getNombre() const {
+    return nombre;
+}
 
-void colaborador::setNombre(const string& n) { nombre = n; }
-void colaborador::setApellido(const string& a) { apellido = a; }
-void colaborador::setCodigoAfiliacion(const string& c) { codigoAfiliacion = c; }
+string colaborador::getApellido() const {
+    return apellido;
+}
 
+string colaborador::getCodigoAfiliacion() const {
+    return codigoAfiliacion;
+}
+
+void colaborador::setNombre(const string& n) {
+    nombre = n;
+}
+
+void colaborador::setApellido(const string& a) {
+    apellido = a;
+}
+
+void colaborador::setCodigoAfiliacion(const string& c) {
+    codigoAfiliacion = c;
+}

@@ -1,0 +1,24 @@
+C001,Chantaje,chantaje_128.mp3,chantaje_320.mp3,3.15,450000000,A001
+C002,Me Enamoré,meenamore_128.mp3,meenamore_320.mp3,3.10,350000000,A001
+C003,La Bicicleta,bici_128.mp3,bici_320.mp3,3.49,420000000,A001
+C004,Hips Don’t Lie,hips_128.mp3,hips_320.mp3,3.38,800000000,A002
+C005,Illegal,illegal_128.mp3,illegal_320.mp3,3.55,250000000,A002
+C006,La Tortura,tortura_128.mp3,tortura_320.mp3,3.33,600000000,A002
+C007,Shape of You,shape_128.mp3,shape_320.mp3,3.54,1800000000,A003
+C008,Perfect,perfect_128.mp3,perfect_320.mp3,4.21,1300000000,A003
+C009,Galway Girl,galway_128.mp3,galway_320.mp3,2.50,950000000,A003
+C010,Bad Habits,badhabits_128.mp3,badhabits_320.mp3,3.51,980000000,A004
+C011,Shivers,shivers_128.mp3,shivers_320.mp3,3.27,870000000,A004
+C012,Overpass Graffiti,overpass_128.mp3,overpass_320.mp3,3.56,620000000,A004
+C013,Blinding Lights,blinding_128.mp3,blinding_320.mp3,3.22,2000000000,A005
+C014,Save Your Tears,save_128.mp3,save_320.mp3,3.35,1200000000,A005
+C015,In Your Eyes,eyes_128.mp3,eyes_320.mp3,3.58,950000000,A005
+C016,Take My Breath,tmb_128.mp3,tmb_320.mp3,5.40,980000000,A006
+C017,Sacrifice,sacrifice_128.mp3,sacrifice_320.mp3,3.09,760000000,A006
+C018,Out of Time,outoftime_128.mp3,outoftime_320.mp3,3.34,720000000,A006
+C019,Titi Me Pregunto,titi_128.mp3,titi_320.mp3,4.03,1500000000,A007
+C020,Me Porto Bonito,bonito_128.mp3,bonito_320.mp3,2.58,1700000000,A007
+C021,Ojitos Lindos,ojitos_128.mp3,ojitos_320.mp3,4.18,1200000000,A007
+C022,Safaera,safaera_128.mp3,safaera_320.mp3,4.55,1100000000,A008
+C023,Yo Perreo Sola,perreo_128.mp3,perreo_320.mp3,2.51,900000000,A008
+C024,La Difícil,dificil_128.mp3,dificil_320.mp3,2.44,800000000,A008

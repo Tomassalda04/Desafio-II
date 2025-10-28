@@ -1,6 +1,6 @@
 #include "album.h"
-#include "cancion.h"
 #include "artista.h"
+using namespace std;
 
 album::album() {
     id = "";
@@ -11,10 +11,10 @@ album::album() {
     numCanciones = 0;
     canciones = nullptr;
     autor = nullptr;
+    for (int i = 0; i < 4; ++i) genero[i] = "";
 }
 
-album::album(string id, string nombre, string sello, string fecha,
-             int puntuacion, int numCanciones, artista* autor) {
+album::album(string id, string nombre, string sello, string fecha, int puntuacion, int numCanciones, artista* autor) {
     this->id = id;
     this->nombre = nombre;
     this->sello = sello;
@@ -23,6 +23,7 @@ album::album(string id, string nombre, string sello, string fecha,
     this->numCanciones = numCanciones;
     this->autor = autor;
     canciones = (numCanciones > 0) ? new cancion[numCanciones] : nullptr;
+    for (int i = 0; i < 4; ++i) genero[i] = "";
 }
 
 album::album(const album& other) {
@@ -33,11 +34,11 @@ album::album(const album& other) {
     puntuacion = other.puntuacion;
     numCanciones = other.numCanciones;
     autor = other.autor;
+    for (int i = 0; i < 4; ++i) genero[i] = other.genero[i];
 
     if (numCanciones > 0) {
         canciones = new cancion[numCanciones];
-        for (int i = 0; i < numCanciones; i++)
-            canciones[i] = other.canciones[i];
+        for (int i = 0; i < numCanciones; i++) canciones[i] = other.canciones[i];
     } else {
         canciones = nullptr;
     }
@@ -58,10 +59,11 @@ album& album::operator=(const album& other) {
         numCanciones = other.numCanciones;
         autor = other.autor;
 
+        for (int i = 0; i < 4; ++i) genero[i] = other.genero[i];
+
         if (numCanciones > 0) {
             canciones = new cancion[numCanciones];
-            for (int i = 0; i < numCanciones; i++)
-                canciones[i] = other.canciones[i];
+            for (int i = 0; i < numCanciones; i++) canciones[i] = other.canciones[i];
         } else {
             canciones = nullptr;
         }
@@ -77,6 +79,7 @@ int album::getPuntuacion() const { return puntuacion; }
 int album::getNumCanciones() const { return numCanciones; }
 artista* album::getAutor() const { return autor; }
 cancion* album::getCanciones() const { return canciones; }
+string* album::getGeneros() { return genero; }
 
 void album::setId(const string& i) { id = i; }
 void album::setNombre(const string& n) { nombre = n; }
@@ -85,10 +88,16 @@ void album::setFecha(const string& f) { fecha = f; }
 void album::setPuntuacion(int p) { puntuacion = p; }
 void album::setAutor(artista* a) { autor = a; }
 
+void album::setGeneros(const string generos[], int n) {
+    for (int i = 0; i < 4; i++) {
+        if (i < n) genero[i] = generos[i];
+        else genero[i] = "";
+    }
+}
+
 void album::agregarCancion(const cancion& nueva) {
     cancion* temp = new cancion[numCanciones + 1];
-    for (int i = 0; i < numCanciones; i++)
-        temp[i] = canciones[i];
+    for (int i = 0; i < numCanciones; i++) temp[i] = canciones[i];
     temp[numCanciones] = nueva;
     delete[] canciones;
     canciones = temp;
@@ -96,12 +105,10 @@ void album::agregarCancion(const cancion& nueva) {
 }
 
 void album::mostrarInfo() const {
-    cout << "\nÁlbum: " << nombre
+    cout << "\nAlbum: " << nombre
          << "\nID: " << id
          << "\nSello: " << sello
          << "\nFecha: " << fecha
-         << "\nPuntuación: " << puntuacion
-         << "\nNúmero de canciones: " << numCanciones << endl;
+         << "\nPuntuacion: " << puntuacion
+         << "\nNumero de canciones: " << numCanciones << endl;
 }
-
- 

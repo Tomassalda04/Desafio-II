@@ -1,4 +1,6 @@
 #include "funcionesaux.h"
+#include <iostream>
+using namespace std;
 
 int verificarPremium(char &pre){
     while(pre!='0' && pre!='1'){

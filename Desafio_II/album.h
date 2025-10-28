@@ -2,12 +2,12 @@
 #define ALBUM_H
 
 #include "funciones.h"
-#include"cancion.h"
-class artista;
+#include "cancion.h"
+using namespace std;
 
+class artista; // Declaración adelantada (para evitar ciclo)
 
 class album {
-
 private:
     string id;
     string nombre;
@@ -21,14 +21,12 @@ private:
 
 public:
     album();
-    album(string id, string nombre, string sello, string fecha,
-          int puntuacion = 0, int numCanciones = 0, artista* autor = nullptr);
-
+    album(string id, string nombre, string sello, string fecha, int puntuacion = 0, int numCanciones = 0, artista* autor = nullptr);
     album(const album& other);
     ~album();
-
     album& operator=(const album& other);
 
+    // Getters
     string getId() const;
     string getNombre() const;
     string getSello() const;
@@ -37,17 +35,20 @@ public:
     int getNumCanciones() const;
     artista* getAutor() const;
     cancion* getCanciones() const;
+    string* getGeneros();
 
+    // Setters
     void setId(const string& id);
     void setNombre(const string& nombre);
     void setSello(const string& sello);
     void setFecha(const string& fecha);
     void setPuntuacion(int puntuacion);
     void setAutor(artista* autor);
+    void setGeneros(const string generos[], int n);
 
+    // Operaciones
     void agregarCancion(const cancion& nueva);
     void mostrarInfo() const;
 };
 
-#endif // ALBUM_H
-
+#endif

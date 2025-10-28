@@ -1,16 +1,17 @@
 #ifndef REPRODUCTOR_H
 #define REPRODUCTOR_H
+
 #include "funciones.h"
 #include "cancion.h"
 #include "usuario.h"
 #include "publicidad.h"
+using namespace std;
 
-class reproductor
-{
+class reproductor {
 private:
-    cancion *actual;
-    usuario *usr;
-    publicidad *anuncios;
+    cancion* actual;
+    usuario* usr;
+    publicidad* anuncios;
     int numAnuncios;
     int contadorReproducciones;
     bool reproduciendo;
@@ -20,18 +21,19 @@ private:
 
 public:
     reproductor();
+
     void setUsuario(usuario* u);
     void setPublicidad(publicidad* a, int n);
 
     void reproducir(cancion* c);
+    void reproducirAleatorio(cancion* lista, int total);
     void pausar();
     void reanudar();
     void detener();
-
     void subirVolumen();
     void bajarVolumen();
     void alternarAleatorio();
     void mostrarEstado() const;
 };
 
-#endif // REPRODUCTOR_H
+#endif

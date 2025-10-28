@@ -1,4 +1,6 @@
 #include "usuario.h"
+#include <iostream>
+using namespace std;
 
 usuario::usuario() {
     nickname = "";
@@ -6,63 +8,77 @@ usuario::usuario() {
     pais = "";
     fechaRegistro = "";
     premium = false;
+    favoritos = nullptr;
+    numFavoritos = 0;
+    siguiendo = nullptr;
 }
 
-usuario::usuario(string nickname,string ciudad,string pais,string fechaRegistro,bool premium){
+usuario::usuario(string nickname, string ciudad, string pais, string fechaRegistro, bool premium) {
     this->nickname = nickname;
     this->ciudad = ciudad;
     this->pais = pais;
     this->fechaRegistro = fechaRegistro;
     this->premium = premium;
-    this->favoritos = nullptr;
-    this->numFavoritos = 0;
-    this->siguiendo = nullptr;
+    favoritos = nullptr;
+    numFavoritos = 0;
+    siguiendo = nullptr;
 }
 
-string usuario::getNickname() const {
-    return nickname;
-}
-string usuario::getCiudad() const {
-    return ciudad;
-}
-string usuario::getPais() const {
-    return pais;
-}
-string usuario::getFechaRegistro() const {
-    return fechaRegistro;
-}
-bool usuario::getPremium() const {
-    return premium;
+usuario::~usuario() {
+    delete[] favoritos;
 }
 
-void usuario::setNickname(string nuevoName){
-    nickname=nuevoName;
-}
-void usuario::setCiudad(string nuevaCiudadad){
-    ciudad=nuevaCiudadad;
-}
-void usuario::setPais(string nuevoPais){
-    pais=nuevoPais;
-}
-void usuario::setFechaRegistro(string nuevaFecha){
-    fechaRegistro=nuevaFecha;
-}
-void usuario::setPremium(bool actPremium){
-    premium=actPremium;
-}
+string usuario::getNickname() const { return nickname; }
+string usuario::getCiudad() const { return ciudad; }
+string usuario::getPais() const { return pais; }
+string usuario::getFechaRegistro() const { return fechaRegistro; }
+bool usuario::getPremium() const { return premium; }
+
+void usuario::setNickname(string n) { nickname = n; }
+void usuario::setCiudad(string c) { ciudad = c; }
+void usuario::setPais(string p) { pais = p; }
+void usuario::setFechaRegistro(string f) { fechaRegistro = f; }
+void usuario::setPremium(bool act) { premium = act; }
+
 void usuario::agregarFavorito(cancion* c) {
-    if (!c) {
-        cout << "No se puede agregar una canción nula a favoritos.\n";
-        return;
-    }
+    if (!c) return;
     cancion* temp = new cancion[numFavoritos + 1];
-    for (int i = 0; i < numFavoritos; i++)
-        temp[i] = favoritos[i];
+    for (int i = 0; i < numFavoritos; i++) temp[i] = favoritos[i];
     temp[numFavoritos] = *c;
     delete[] favoritos;
     favoritos = temp;
     numFavoritos++;
-    cout << "Canción agregada a favoritos correctamente.\n";
+    cout << "Cancion agregada a favoritos.\n";
+}
+
+void usuario::eliminarFavorito(const string& idCancion) {
+    if (numFavoritos == 0) {
+        cout << "No tienes canciones en favoritos.\n";
+        return;
+    }
+
+    int idx = -1;
+    for (int i = 0; i < numFavoritos; i++) {
+        if (favoritos[i].getId() == idCancion) {
+            idx = i;
+            break;
+        }
+    }
+
+    if (idx == -1) {
+        cout << "Cancion no encontrada en favoritos.\n";
+        return;
+    }
+
+    cancion* temp = new cancion[numFavoritos - 1];
+    for (int i = 0, j = 0; i < numFavoritos; i++) {
+        if (i != idx) temp[j++] = favoritos[i];
+    }
+
+    delete[] favoritos;
+    favoritos = temp;
+    numFavoritos--;
+    cout << "Cancion eliminada de favoritos.\n";
 }
 
 void usuario::mostrarFavoritos() const {
@@ -70,18 +86,15 @@ void usuario::mostrarFavoritos() const {
         cout << "No tienes canciones en favoritos.\n";
         return;
     }
+
     cout << "\n=== FAVORITOS DE " << nickname << " ===\n";
     for (int i = 0; i < numFavoritos; i++) {
-        cout << "- " << favoritos[i].getNombre() << endl;
+        cout << "- " << favoritos[i].getNombre() << " (" << favoritos[i].getId() << ")\n";
     }
 }
 
 void usuario::seguirUsuario(usuario* otro) {
-    if (!otro) {
-        cout << "Usuario no válido.\n";
-        return;
-    }
-    if (!otro->getPremium()) {
+    if (!otro || !otro->getPremium()) {
         cout << "Solo puedes seguir a usuarios Premium.\n";
         return;
     }
@@ -91,9 +104,9 @@ void usuario::seguirUsuario(usuario* otro) {
 
 void usuario::mostrarFavoritosSeguido() const {
     if (!siguiendo) {
-        cout << "No estás siguiendo a ningún usuario.\n";
+        cout << "No estas siguiendo a ningun usuario.\n";
         return;
     }
-    cout << "\nFavoritos del usuario seguido (" << siguiendo->getNickname() << "):\n";
+    cout << "\nFavoritos de " << siguiendo->getNickname() << ":\n";
     siguiendo->mostrarFavoritos();
 }

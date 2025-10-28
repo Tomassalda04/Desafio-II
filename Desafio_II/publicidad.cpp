@@ -21,4 +21,3 @@ void publicidad::setCategoria(char nuevaCategoria) { categoria = nuevaCategoria;
 void publicidad::mostrar() const {
     cout << "[" << categoria << "] " << texto << endl;
 }
-

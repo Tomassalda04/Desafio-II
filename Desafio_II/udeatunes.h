@@ -1,17 +1,26 @@
 #ifndef UDEATUNES_H
 #define UDEATUNES_H
+
 #include "funciones.h"
 #include "usuario.h"
 #include "artista.h"
+#include "album.h"
+#include "cancion.h"
 #include "publicidad.h"
+#include "colaborador.h"
+#include "creditos.h"
+using namespace std;
 
-class udeaTunes {
-
+class udeatunes {
 private:
     usuario* usuarios;
     int numUsuarios;
     artista* artistas;
     int numArtistas;
+    album* albums;
+    int numAlbums;
+    cancion* canciones;
+    int numCanciones;
     publicidad* mensajes;
     int numMensajes;
     colaborador* colaboradores;
@@ -19,14 +28,12 @@ private:
     creditos* listaCreditos;
     int numCreditos;
 
-
 public:
-    udeaTunes();
-    ~udeaTunes();
+    udeatunes();
+    ~udeatunes();
 
     void menuPrincipal();
     void iniciarSesion();
-    void registrarUsuario();
 };
 
-#endif // UDEATUNES_H
+#endif

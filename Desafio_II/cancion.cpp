@@ -14,8 +14,7 @@ cancion::cancion() {
     alb = nullptr;
 }
 
-cancion::cancion(string id, string nombre, string ruta128, string ruta320,
-                 float duracion, int reproducciones, album* alb) {
+cancion::cancion(string id, string nombre, string ruta128, string ruta320, float duracion, int reproducciones, album* alb) {
     this->id = id;
     this->nombre = nombre;
     this->ruta128 = ruta128;
@@ -37,12 +36,6 @@ cancion::cancion(const cancion& other) {
     infoCreditos = other.infoCreditos;
 }
 
-cancion::~cancion() {
-    // no se borra alb ni infoCreditos, solo se desconecta
-    alb = nullptr;
-    infoCreditos = nullptr;
-}
-
 cancion& cancion::operator=(const cancion& other) {
     if (this != &other) {
         id = other.id;
@@ -55,6 +48,10 @@ cancion& cancion::operator=(const cancion& other) {
         infoCreditos = other.infoCreditos;
     }
     return *this;
+}
+
+cancion::~cancion() {
+    // No se libera alb ni infoCreditos porque no son propiedad de la canción
 }
 
 string cancion::getId() const { return id; }
@@ -74,9 +71,9 @@ void cancion::setReproducciones(int r) { reproducciones = r; }
 void cancion::setAlbum(album* a) { alb = a; }
 
 void cancion::mostrarInfo() const {
-    cout << "\nCanción: " << nombre
+    cout << "\nCancion: " << nombre
          << "\nID: " << id
-         << "\nDuración: " << duracion << " min"
+         << "\nDuracion: " << duracion << " min"
          << "\nReproducciones: " << reproducciones
          << "\nRuta (128 kbps): " << ruta128
          << "\nRuta (320 kbps): " << ruta320

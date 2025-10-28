@@ -1,7 +1,13 @@
 #include "reproductor.h"
+#include "album.h"
+#include "artista.h"
+#include "cancion.h"
 #include <iostream>
+#include <thread>
+#include <chrono>
 #include <cstdlib>
-using namespace std;
+#include <ctime>
+
 
 reproductor::reproductor() {
     actual = nullptr;
@@ -25,93 +31,139 @@ void reproductor::setPublicidad(publicidad* a, int n) {
 }
 
 void reproductor::reproducir(cancion* c) {
-    if (!usr) {
-        cout << "No hay usuario asignado al reproductor.\n";
-        return;
-    }
-
-    if (c == nullptr) {
-        cout << "Reproduciendo canción simulada...\n";
-    }
-
-    if (!usr->getPremium()) {
-        contadorReproducciones++;
-        if (contadorReproducciones % 2 == 0 && anuncios && numAnuncios > 0) {
-            int idx = rand() % numAnuncios;
-            cout << "\n--- ANUNCIO PUBLICITARIO ---\n";
-            anuncios[idx].mostrar(); // Usamos el método mostrar() de publicidad
-            cout << "----------------------------\n";
-        }
-    }
-
+    if (!c) return;
     actual = c;
     reproduciendo = true;
     pausado = false;
-
-    if(c != nullptr)
-        cout << "Reproduciendo: " << c->getNombre() << endl;
-    else
-        cout << "Reproduciendo canción de prueba\n";
+    contadorReproducciones++;
+    string rutaAudio = c->getRuta128();
+    if (usr && usr->getPremium()) rutaAudio = c->getRuta320();
+    album* alb = c->getAlbum();
+    string rutaPortada = "";
+    if (alb) {
+        artista* art = alb->getAutor();
+        if (art) rutaPortada = "/users/storage/" + art->getNombre() + "/image/" + alb->getNombre() + ".png";
+    }
+    cout << "Reproduciendo: " << c->getNombre() << " (" << c->getDuracion() << " min)" << endl;
+    if (!rutaPortada.empty()) cout << "Ruta portada: " << rutaPortada << endl;
+    cout << "Ruta audio: " << rutaAudio << endl;
 }
 
 void reproductor::pausar() {
-    if (!reproduciendo) {
-        cout << "No hay ninguna canción en reproducción.\n";
-        return;
+    if (reproduciendo && !pausado) {
+        pausado = true;
+        cout << "Reproduccion pausada." << endl;
+    } else {
+        cout << "No hay reproduccion activa para pausar." << endl;
     }
-    pausado = true;
-    cout << "Canción pausada.\n";
 }
 
 void reproductor::reanudar() {
-    if (reproduciendo && pausado) {
+    if (pausado) {
         pausado = false;
-        cout << "Reanudando canción...\n";
+        cout << "Reanudando reproduccion." << endl;
     } else {
-        cout << "No hay canción pausada para reanudar.\n";
+        cout << "No hay reproduccion pausada." << endl;
     }
 }
 
 void reproductor::detener() {
-    if (!reproduciendo) {
-        cout << "No hay ninguna canción en reproducción.\n";
-        return;
+    if (reproduciendo) {
+        reproduciendo = false;
+        pausado = false;
+        actual = nullptr;
+        cout << "Reproduccion detenida." << endl;
+    } else {
+        cout << "No hay reproduccion activa." << endl;
     }
-    reproduciendo = false;
-    actual = nullptr;
-    cout << "Reproducción detenida.\n";
 }
 
 void reproductor::subirVolumen() {
     if (volumen < 100) volumen += 10;
     if (volumen > 100) volumen = 100;
-    cout << "Volumen: " << volumen << "%\n";
+    cout << "Volumen: " << volumen << "%" << endl;
 }
 
 void reproductor::bajarVolumen() {
     if (volumen > 0) volumen -= 10;
     if (volumen < 0) volumen = 0;
-    cout << "Volumen: " << volumen << "%\n";
+    cout << "Volumen: " << volumen << "%" << endl;
 }
 
 void reproductor::alternarAleatorio() {
     aleatorio = !aleatorio;
-    cout << "Modo aleatorio " << (aleatorio ? "activado" : "desactivado") << ".\n";
+    cout << "Modo aleatorio " << (aleatorio ? "activado" : "desactivado") << "." << endl;
 }
 
 void reproductor::mostrarEstado() const {
-    cout << "\n--- ESTADO DEL REPRODUCTOR ---\n";
-    if (usr)
-        cout << "Usuario: " << usr->getNickname() << " (" << (usr->getPremium() ? "Premium" : "Estándar") << ")\n";
-    if (actual) {
-        cout << "Canción actual: " << actual->getNombre() << endl;
-    } else {
-        cout << "Canción actual: [simulada]\n";
-    }
-    cout << "Reproduciendo: " << (reproduciendo ? "Sí" : "No") << endl;
-    cout << "Pausado: " << (pausado ? "Sí" : "No") << endl;
-    cout << "Modo aleatorio: " << (aleatorio ? "Activado" : "Desactivado") << endl;
+    cout << "=== Estado del Reproductor ===" << endl;
+    if (actual)
+        cout << "Cancion actual: " << actual->getNombre() << endl;
+    else
+        cout << "No hay cancion en reproduccion." << endl;
     cout << "Volumen: " << volumen << "%" << endl;
-    cout << "-------------------------------\n";
+    cout << "Aleatorio: " << (aleatorio ? "Si" : "No") << endl;
+    cout << "Reproducciones totales en sesion: " << contadorReproducciones << endl;
+    cout << "Reproduciendo: " << (reproduciendo ? "Si" : "No") << endl;
+    cout << "Pausado: " << (pausado ? "Si" : "No") << endl;
 }
 
+static int seleccionarPublicidad(publicidad* anuncios, int numAnuncios, int ultimo) {
+    if (!anuncios || numAnuncios == 0) return -1;
+    int totalPeso = 0;
+    int pesos[100];
+    for (int i = 0; i < numAnuncios; i++) {
+        char c = anuncios[i].getCategoria();
+        int peso = 1;
+        if (c == 'A') peso = 3;
+        else if (c == 'B') peso = 2;
+        else peso = 1;
+        pesos[i] = peso;
+        totalPeso += peso;
+    }
+    if (totalPeso == 0) return -1;
+    int intento = 0;
+    while (intento < 10) {
+        int r = rand() % totalPeso;
+        int acum = 0;
+        for (int i = 0; i < numAnuncios; i++) {
+            acum += pesos[i];
+            if (r < acum) {
+                if (i != ultimo) return i;
+                else break;
+            }
+        }
+        intento++;
+    }
+    for (int i = 0; i < numAnuncios; i++) if (i != ultimo) return i;
+    return 0;
+}
+
+void reproductor::reproducirAleatorio(cancion* lista, int total) {
+    srand((unsigned)time(nullptr));
+    if (!lista || total == 0) {
+        cout << "No hay canciones disponibles en la lista global.\n";
+        return;
+    }
+    cout << "\n=== Reproduccion aleatoria (5 canciones, 3 segundos c/u) ===\n" << endl;
+    int ultimoAd = -1;
+    for (int i = 0; i < 5; i++) {
+        int index = rand() % total;
+        cancion* seleccionada = &lista[index];
+        reproducir(seleccionada);
+        if (!usr || !usr->getPremium()) {
+            if ((i + 1) % 2 == 0 && numAnuncios > 0) {
+                int idxAd = seleccionarPublicidad(anuncios, numAnuncios, ultimoAd);
+                if (idxAd >= 0) {
+                    ultimoAd = idxAd;
+                    cout << "----- PUBLICIDAD -----\n";
+                    anuncios[idxAd].mostrar();
+                    cout << "----------------------\n";
+                }
+            }
+        }
+        std::this_thread::sleep_for(std::chrono::seconds(3));
+    }
+    detener();
+    cout << "\nReproduccion aleatoria finalizada.\n" << endl;
+}
