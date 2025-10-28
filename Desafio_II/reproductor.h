@@ -34,6 +34,9 @@ public:
     void bajarVolumen();
     void alternarAleatorio();
     void mostrarEstado() const;
+    void mostrarEstado(bool detalle) const;
+
+
 };
 
 #endif

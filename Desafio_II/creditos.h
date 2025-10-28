@@ -1,7 +1,7 @@
 #ifndef CREDITOS_H
 #define CREDITOS_H
 
-#include "colaborador.h"
+class colaborador;
 using namespace std;
 
 class creditos {

@@ -1,4 +1,7 @@
 #include "artista.h"
+#include "album.h"      // ✅ agregado para evitar el error
+#include "funciones.h"
+#include <iostream>
 using namespace std;
 
 artista::artista() {

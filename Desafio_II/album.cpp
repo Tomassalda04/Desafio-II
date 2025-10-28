@@ -1,5 +1,7 @@
 #include "album.h"
 #include "artista.h"
+#include "cancion.h"
+#include <iostream>
 using namespace std;
 
 album::album() {

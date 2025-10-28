@@ -1,7 +1,8 @@
 #include "creditos.h"
+#include "colaborador.h"
+#include "funciones.h"
 #include <iostream>
 using namespace std;
-
 creditos::creditos() {
     productores = nullptr;
     musicos = nullptr;

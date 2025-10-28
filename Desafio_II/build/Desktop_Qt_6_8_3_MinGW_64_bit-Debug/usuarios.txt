@@ -1,4 +1,6 @@
+isabela,CarmenViboral,Colombia,2025-10-27,1
 tomas,Medellin,Colombia,2024-05-01,1
 daniel,Bogota,Colombia,2024-06-10,0
 laura,Cali,Colombia,2024-07-20,1
 sofia,Barranquilla,Colombia,2024-08-10,0
+

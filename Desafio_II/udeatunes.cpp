@@ -26,10 +26,10 @@ udeatunes::udeatunes() {
     cargarAlbums(albums, numAlbums, artistas, numArtistas);
     cargarCanciones(canciones, numCanciones, albums, numAlbums);
     cargarPublicidad(mensajes, numMensajes);
-    cargarColaboradores(colaboradores, numColaboradores);
-    cargarCreditos(listaCreditos, numCreditos, colaboradores, numColaboradores);
-    //cargarFavoritos(usuarios, numUsuarios, canciones, numCanciones, "favoritos.txt");
-    //cargarSeguidos(usuarios, numUsuarios, "seguidos.txt");
+
+    cargarFavoritos(usuarios, numUsuarios, canciones, numCanciones, "favoritos.txt");
+    cargarSeguidos(usuarios, numUsuarios, "seguidos.txt");
+
 }
 
 udeatunes::~udeatunes() {
@@ -44,6 +44,7 @@ udeatunes::~udeatunes() {
 }
 
 void udeatunes::iniciarSesion() {
+    srand(static_cast<unsigned>(time(nullptr)));
     string nick;
     cout << "\nIngrese su nickname: ";
     cin >> nick;
@@ -56,17 +57,21 @@ void udeatunes::iniciarSesion() {
         }
     }
 
+    if (!usr) {
+        cout << "Usuario no encontrado.\n";
+        return;
+    }
 
     cout << "Bienvenido, " << usr->getNickname() << "!\n";
     if (usr->getPremium()) {
-        menuUsuarioPremium(usr, canciones, numCanciones);
+        menuUsuarioPremium(usr, usuarios, numUsuarios, canciones, numCanciones,numArtistas, numAlbums, numMensajes);
     } else {
-        menuUsuarioEstandar(usr, mensajes, numMensajes);
+        menuUsuarioEstandar(usr, canciones, numCanciones, mensajes, numMensajes,numArtistas, numAlbums, numMensajes);
     }
 }
 
 void udeatunes::menuPrincipal() {
-    int opcion = 0;
+    char opcion = 0;
     do {
         cout << "\n===== UdeATunes =====\n";
         cout << "1. Iniciar sesion\n";
@@ -75,10 +80,10 @@ void udeatunes::menuPrincipal() {
         cin >> opcion;
 
         switch (opcion) {
-        case 1:
+        case '1':
             iniciarSesion();
             break;
-        case 2:
+        case '2':
             cout << "Saliendo del programa...\n";
             break;
         default:

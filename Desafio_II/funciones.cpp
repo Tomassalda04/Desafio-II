@@ -359,10 +359,16 @@ void cargarCreditos(creditos*& listaCreditos, int& numCreditos, colaborador* col
     archivo.close();
 }
 
-void menuUsuarioPremium(usuario* u, cancion* canciones, int numCanciones) {
+void menuUsuarioPremium(usuario* u, usuario* usuarios, int numUsuarios,cancion* canciones, int numCanciones,int numArtistas, int numAlbums, int numMensajes) {
+    (void)numArtistas; // evita warning si no se usan luego
+    (void)numAlbums;
+    (void)numMensajes;
+
     reproductor player;
     player.setUsuario(u);
     char opcion;
+    int iteraciones = 0; // declaramos iteraciones aqui
+
     do {
         cout << "\n===== MENU PREMIUM =====\n";
         cout << "1. Reproducir 5 canciones aleatorias\n";
@@ -384,18 +390,20 @@ void menuUsuarioPremium(usuario* u, cancion* canciones, int numCanciones) {
 
         switch (opcion) {
         case '1': {
-            cout << "\nReproduciendo 5 canciones aleatorias...\n";
             reproductor rep;
             rep.reproducirAleatorio(canciones, numCanciones);
+            iteraciones++;
+            medirConsumoRecursos("Reproducir aleatorio", iteraciones, numUsuarios, numArtistas, numAlbums, numCanciones, numMensajes);
             break;
         }
 
-        case '2': player.pausar(); break;
-        case '3': player.reanudar(); break;
-        case '4': player.detener(); break;
-        case '5': player.subirVolumen(); break;
-        case '6': player.bajarVolumen(); break;
-        case '7': player.mostrarEstado(); break;
+        case '2': player.pausar(); iteraciones++; break;
+        case '3': player.reanudar(); iteraciones++; break;
+        case '4': player.detener(); iteraciones++; break;
+        case '5': player.subirVolumen(); iteraciones++; break;
+        case '6': player.bajarVolumen(); iteraciones++; break;
+        case '7': player.mostrarEstado(); iteraciones++; break;
+
         case '8': {
             string id;
             cout << "ID de la cancion a agregar: ";
@@ -404,86 +412,272 @@ void menuUsuarioPremium(usuario* u, cancion* canciones, int numCanciones) {
             for (int i = 0; i < numCanciones; i++) {
                 if (canciones[i].getId() == id) {
                     u->agregarFavorito(&canciones[i]);
+                    guardarFavoritos(usuarios, numUsuarios, "favoritos.txt");
                     encontrada = true;
                     break;
                 }
             }
             if (!encontrada) cout << "Cancion no encontrada.\n";
+            iteraciones++;
+            medirConsumoRecursos("Agregar favorito", iteraciones, numUsuarios, numArtistas, numAlbums, numCanciones, numMensajes);
             break;
         }
+
         case '9': {
             string id;
             cout << "ID de la cancion a eliminar: ";
             cin >> id;
             u->eliminarFavorito(id);
+            guardarFavoritos(usuarios, numUsuarios, "favoritos.txt");
+            iteraciones++;
+            medirConsumoRecursos("Eliminar favorito", iteraciones, numUsuarios, numArtistas, numAlbums, numCanciones, numMensajes);
             break;
         }
-        case 'A': u->mostrarFavoritos(); break;
+
+        case 'A': u->mostrarFavoritos(); iteraciones++; break;
+
         case 'B': {
             string nombreSeguir;
             cout << "Nickname del Premium a seguir: ";
             cin >> nombreSeguir;
-            usuario otro(nombreSeguir, "", "", "", true);
-            u->seguirUsuario(&otro);
+            usuario* seguido = nullptr;
+            for (int i = 0; i < numUsuarios; ++i) {
+                if (usuarios[i].getNickname() == nombreSeguir && usuarios[i].getPremium()) {
+                    seguido = &usuarios[i];
+                    break;
+                }
+            }
+            if (seguido) {
+                u->seguirUsuario(seguido);
+                guardarSeguidos(usuarios, numUsuarios, "seguidos.txt");
+                cancion* favSeguido = seguido->getFavoritos();
+                int numFavSeguido = seguido->getNumFavoritos();
+                for (int i = 0; i < numFavSeguido; i++) {
+                    bool yaExiste = false;
+                    for (int j = 0; j < u->getNumFavoritos(); j++) {
+                        if (u->getFavoritos()[j].getId() == favSeguido[i].getId()) {
+                            yaExiste = true;
+                            break;
+                        }
+                    }
+                    if (!yaExiste) {
+                        u->agregarFavorito(&favSeguido[i]);
+                    }
+                }
+                guardarFavoritos(usuarios, numUsuarios, "favoritos.txt");
+                cout << "Ahora sigues a " << nombreSeguir << " y se han agregado sus canciones favoritas a tus favoritos.\n";
+            } else {
+                cout << "Usuario no encontrado o no es premium.\n";
+            }
+            iteraciones++;
+            medirConsumoRecursos("Seguir usuario y copiar favoritos", iteraciones, numUsuarios, numArtistas, numAlbums, numCanciones, numMensajes);
             break;
         }
-        case 'C': u->mostrarFavoritosSeguido(); break;
-        case 'D': cout << "Sesion cerrada.\n"; break;
+
+        case 'C': u->mostrarFavoritosSeguido(); iteraciones++; break;
+        case 'D': cout << "Sesion cerrada.\n"; iteraciones++; medirConsumoRecursos("Cerrar sesion", iteraciones, numUsuarios, numArtistas, numAlbums, numCanciones, numMensajes); break;
         default: cout << "Opcion invalida.\n";
         }
     } while (opcion != 'D');
 }
 
 
-void menuUsuarioEstandar(usuario* u, publicidad* anuncios, int numAnuncios) {
+void menuUsuarioEstandar(usuario* u, cancion* canciones, int numCanciones,publicidad* anuncios, int numAnuncios,int numArtistas, int numAlbums, int numMensajes) {
+    (void)numArtistas;
+    (void)numAlbums;
+    (void)numMensajes;
+
     reproductor player;
     player.setUsuario(u);
     player.setPublicidad(anuncios, numAnuncios);
+
+    static int contadorCanciones = 0;
+    int iteraciones = 0;
     char opcion;
+
     do {
         cout << "\n===== MENU USUARIO ESTANDAR =====\n";
-        cout << "1. Reproducir cancion\n";
+        cout << "1. Reproducir cancion (con anuncios cada 2)\n";
         cout << "2. Pausar cancion\n";
         cout << "3. Reanudar cancion\n";
         cout << "4. Detener cancion\n";
         cout << "5. Subir volumen\n";
         cout << "6. Bajar volumen\n";
-        cout << "7. Activar/desactivar modo aleatorio\n";
-        cout << "8. Ver estado del reproductor\n";
-        cout << "9. Cerrar sesion\n";
+        cout << "7. Ver estado del reproductor\n";
+        cout << "8. Cerrar sesion\n";
         cout << "Seleccione una opcion: ";
         cin >> opcion;
         opcion = toupper(opcion);
+
         switch (opcion) {
-        case '1':
-            player.reproducir(nullptr);
+        case '1': {
+            string id;
+            cout << "Ingrese el ID de la cancion: ";
+            cin >> id;
+
+            bool encontrada = false;
+            for (int i = 0; i < numCanciones; i++) {
+                if (canciones[i].getId() == id) {
+                    player.reproducir(&canciones[i]);
+                    encontrada = true;
+                    contadorCanciones++;
+                    iteraciones++;
+
+                    if (contadorCanciones % 2 == 0 && numAnuncios > 0) {
+                        cout << "\n----- PUBLICIDAD -----\n";
+                        int idx = rand() % numAnuncios;
+                        anuncios[idx].mostrar();
+                        cout << "----------------------\n";
+                    }
+                    break;
+                }
+            }
+
+            if (!encontrada) cout << "Cancion no encontrada.\n";
+
+            medirConsumoRecursos("Reproducir cancion (estandar)", iteraciones, /*numUsuarios*/ 0, numArtistas, numAlbums, numCanciones, numMensajes);
             break;
-        case '2':
-            player.pausar();
-            break;
-        case '3':
-            player.reanudar();
-            break;
-        case '4':
-            player.detener();
-            break;
-        case '5':
-            player.subirVolumen();
-            break;
-        case '6':
-            player.bajarVolumen();
-            break;
-        case '7':
-            player.alternarAleatorio();
-            break;
-        case '8':
-            player.mostrarEstado();
-            break;
-        case '9':
-            cout << "Cerrando sesion...\n";
-            break;
-        default:
-            cout << "Opcion invalida.\n";
         }
-    } while (opcion != '9');
+
+        case '2': player.pausar(); iteraciones++; break;
+        case '3': player.reanudar(); iteraciones++; break;
+        case '4': player.detener(); iteraciones++; break;
+        case '5': player.subirVolumen(); iteraciones++; break;
+        case '6': player.bajarVolumen(); iteraciones++; break;
+        case '7': player.mostrarEstado(); iteraciones++; break;
+        case '8': cout << "Cerrando sesion...\n"; iteraciones++; medirConsumoRecursos("Cerrar sesion estandar", iteraciones, /*numUsuarios*/ 0, numArtistas, numAlbums, numCanciones, numMensajes); break;
+        default: cout << "Opcion invalida.\n";
+        }
+    } while (opcion != '8');
+}
+
+
+void cargarFavoritos(usuario* usuarios, int numUsuarios, cancion* canciones, int numCanciones, const string& filename) {
+    ifstream file(filename);
+    if (!file.is_open()) {
+        cout << "No se pudo abrir " << filename << endl;
+        return;
+    }
+
+    string linea;
+    while (getline(file, linea)) {
+        if (linea.empty()) continue;
+        stringstream ss(linea);
+
+        string nick;
+        getline(ss, nick, ',');
+        usuario* u = nullptr;
+
+        // Buscar usuario premium correspondiente
+        for (int i = 0; i < numUsuarios; i++) {
+            if (usuarios[i].getNickname() == nick && usuarios[i].getPremium()) {
+                u = &usuarios[i];
+                break;
+            }
+        }
+        if (!u) continue;
+
+        // Leer los IDs de canciones y agregarlas
+        string idCancion;
+        while (getline(ss, idCancion, ',')) {
+            for (int j = 0; j < numCanciones; j++) {
+                if (canciones[j].getId() == idCancion) {
+                    u->agregarFavorito(&canciones[j]);
+                    break;
+                }
+            }
+        }
+    }
+
+    file.close();
+    cout << "Favoritos cargados desde " << filename << endl;
+}
+
+void guardarFavoritos(usuario* usuarios, int numUsuarios, const string& filename) {
+    ofstream file(filename);
+    if (!file.is_open()) {
+        cout << "Error al guardar en " << filename << endl;
+        return;
+    }
+
+    for (int i = 0; i < numUsuarios; i++) {
+        if (!usuarios[i].getPremium()) continue;
+
+        file << usuarios[i].getNickname();
+
+        int nFav = usuarios[i].getNumFavoritos();
+        cancion* favs = usuarios[i].getFavoritos();
+
+        for (int j = 0; j < nFav; j++) {
+            file << "," << favs[j].getId();
+        }
+        file << "\n";
+    }
+
+    file.close();
+    cout << "Favoritos actualizados en " << filename << endl;
+}
+
+void cargarSeguidos(usuario* usuarios, int numUsuarios, const string& filename) {
+    ifstream file(filename);
+    if (!file.is_open()) {
+        cout << "No se pudo abrir " << filename << endl;
+        return;
+    }
+
+    string linea;
+    while (getline(file, linea)) {
+        if (linea.empty()) continue;
+        stringstream ss(linea);
+        string seguidor, seguido;
+        getline(ss, seguidor, ',');
+        getline(ss, seguido, ',');
+
+        usuario* uSeguidor = nullptr;
+        usuario* uSeguido = nullptr;
+
+        for (int i = 0; i < numUsuarios; i++) {
+            if (usuarios[i].getNickname() == seguidor) uSeguidor = &usuarios[i];
+            if (usuarios[i].getNickname() == seguido) uSeguido = &usuarios[i];
+        }
+
+        if (uSeguidor && uSeguido && uSeguido->getPremium()) {
+            uSeguidor->seguirUsuario(uSeguido);
+        }
+    }
+
+    file.close();
+    cout << "Seguidos cargados desde " << filename << endl;
+}
+
+void guardarSeguidos(usuario* usuarios, int numUsuarios, const string& filename) {
+    ofstream file(filename);
+    if (!file.is_open()) {
+        cout << "Error al guardar en " << filename << endl;
+        return;
+    }
+
+    for (int i = 0; i < numUsuarios; i++) {
+        usuario* seguido = usuarios[i].getSeguido();
+        if (seguido != nullptr) {
+            file << usuarios[i].getNickname() << "," << seguido->getNickname() << "\n";
+        }
+    }
+
+    file.close();
+    cout << "Seguidos actualizados en " << filename << endl;
+}
+
+void medirConsumoRecursos(const string& nombreFuncionalidad, int iteraciones,int numUsuarios, int numArtistas, int numAlbums, int numCanciones, int numMensajes) {
+    size_t memoria = sizeof(usuario) * numUsuarios
+                     + sizeof(artista) * numArtistas
+                     + sizeof(album) * numAlbums
+                     + sizeof(cancion) * numCanciones
+                     + sizeof(publicidad) * numMensajes;
+
+    cout << "\n===== MEDICION DE RECURSOS =====\n";
+    cout << "Funcionalidad: " << nombreFuncionalidad << endl;
+    cout << "Iteraciones realizadas: " << iteraciones << endl;
+    cout << "Memoria total estimada: " << memoria << " bytes\n";
+    cout << "================================\n";
 }

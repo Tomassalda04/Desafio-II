@@ -1,11 +1,12 @@
 #ifndef ALBUM_H
 #define ALBUM_H
 
-#include "funciones.h"
-#include "cancion.h"
+#include <iostream>
+#include <string>
 using namespace std;
 
-class artista; // Declaración adelantada (para evitar ciclo)
+class artista;
+class cancion;
 
 class album {
 private:
@@ -26,7 +27,6 @@ public:
     ~album();
     album& operator=(const album& other);
 
-    // Getters
     string getId() const;
     string getNombre() const;
     string getSello() const;
@@ -37,7 +37,6 @@ public:
     cancion* getCanciones() const;
     string* getGeneros();
 
-    // Setters
     void setId(const string& id);
     void setNombre(const string& nombre);
     void setSello(const string& sello);
@@ -46,7 +45,6 @@ public:
     void setAutor(artista* autor);
     void setGeneros(const string generos[], int n);
 
-    // Operaciones
     void agregarCancion(const cancion& nueva);
     void mostrarInfo() const;
 };

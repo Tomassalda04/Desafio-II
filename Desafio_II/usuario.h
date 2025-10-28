@@ -1,9 +1,10 @@
 #ifndef USUARIO_H
 #define USUARIO_H
-
 #include "funciones.h"
-#include "cancion.h"
+
 using namespace std;
+
+class cancion;
 
 class usuario {
 private:
@@ -41,6 +42,11 @@ public:
     void mostrarFavoritos() const;
     void seguirUsuario(usuario* otro);
     void mostrarFavoritosSeguido() const;
+
+    // === NUEVOS GETTERS PARA GUARDAR Y CARGAR ===
+    int getNumFavoritos() const;
+    cancion* getFavoritos() const;
+    usuario* getSeguido() const;
 };
 
 #endif
